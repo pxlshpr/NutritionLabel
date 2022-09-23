@@ -18,7 +18,9 @@ extension FoodLabel {
             caloriesRow
             Spacer().frame(height: 10)
             rectangle(height: 8)
-            Spacer().frame(height: 6)
+            if viewModel.showRDAValues {
+                Spacer().frame(height: 6)
+            }
         }
     }
     
@@ -133,10 +135,10 @@ extension FoodLabel {
     
     @ViewBuilder
     var percentHeaderRow: some View {
-        Group {
-            HStack(alignment: .top, spacing: 0) {
-                Spacer()
-                if viewModel.showRDAValues {
+        if viewModel.showRDAValues {
+            Group {
+                HStack(alignment: .top, spacing: 0) {
+                    Spacer()
                     Text("% Daily Value")
                         .fontWeight(.semibold)
                         .font(.subheadline)
@@ -144,8 +146,8 @@ extension FoodLabel {
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
+                Spacer().frame(height: 5)
             }
-            Spacer().frame(height: 5)
         }
     }
 }

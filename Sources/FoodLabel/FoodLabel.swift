@@ -68,7 +68,9 @@ public struct FoodLabel<DataSource: FoodLabelDataSource>: View {
         LazyVStack(alignment: .leading, spacing: 0) {
             header
             calories
-            Spacer().frame(height: 3)
+//            if viewModel.showRDAValues {
+                Spacer().frame(height: 3)
+//            }
             macros
             if viewModel.shouldShowMicronutrients {
                 macrosMicrosSeparator
