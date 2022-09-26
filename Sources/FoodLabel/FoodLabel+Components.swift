@@ -90,7 +90,7 @@ extension FoodLabel {
                 .font(.title3)
             Spacer()
 //            Text(dataSource.amountString(withDetails: true, parentMultiplier: 1))
-            Text(viewModel.amountString)
+            Text(viewModel.amountPerString)
                 .fontWeight(.bold)
                 .font(.title3)
                 .multilineTextAlignment(.trailing)

@@ -15,7 +15,7 @@ public protocol FoodLabelDataSource: ObservableObject {
     var haveMicros: Bool { get }
     var haveCustomMicros: Bool { get }
     func nutrient(ofType: NutrientType) -> Double?
-    var amountString: String { get }
+    var amountPerString: String { get }
 }
 
 extension FoodLabelDataSource {

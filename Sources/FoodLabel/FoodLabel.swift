@@ -29,8 +29,8 @@ extension FoodLabel.ViewModel {
         dataSource.showRDAValues
     }
 
-    var amountString: String {
-        dataSource.amountString
+    var amountPerString: String {
+        dataSource.amountPerString
     }
     
     var energyAmount: Double {
@@ -111,8 +111,8 @@ extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
         false
     }
     
-    var amountString: String {
-        "1 serving"
+    var amountPerString: String {
+        "1 serving (1 cup, chopped)"
     }
     
     var nutrients: [NutrientType : Double] {
