@@ -18,7 +18,8 @@ extension FoodLabel.ViewModel {
     }
     
     var shouldShowCustomMicronutrients: Bool {
-        dataSource.haveCustomMicros
+        //TODO: Fix this when custom micros are brought back
+        false
     }
     
     var showFooterText: Bool {
@@ -48,7 +49,6 @@ extension FoodLabel.ViewModel {
     
     func nutrientAmount(for type: NutrientType) -> Double? {
         dataSource.nutrients[type]
-//        dataSource.nutrient(ofType: type)
     }
 }
 
@@ -103,14 +103,6 @@ public struct FoodLabelPreview: View {
 }
 
 extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
-    var haveMicros: Bool {
-        true
-    }
-    
-    var haveCustomMicros: Bool {
-        false
-    }
-    
     var amountPerString: String {
         "1 serving (1 cup, chopped)"
     }
@@ -119,14 +111,6 @@ extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
         [
             .saturatedFat: 5
         ]
-    }
-    func nutrient(ofType type: NutrientType) -> Double? {
-        switch type {
-        case .saturatedFat:
-            return 5
-        default:
-            return nil
-        }
     }
     
     var showRDAValues: Bool {

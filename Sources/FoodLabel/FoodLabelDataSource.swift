@@ -11,17 +11,13 @@ public protocol FoodLabelDataSource: ObservableObject {
     var showFooterText: Bool { get }
     var showRDAValues: Bool { get }
     
-    //Legacy
-    var haveMicros: Bool { get }
-    var haveCustomMicros: Bool { get }
-    func nutrient(ofType: NutrientType) -> Double?
     var amountPerString: String { get }
 }
 
 extension FoodLabelDataSource {
-    var nutrients: [NutrientType: Double] {
-        [:]
-    }
+//    var nutrients: [NutrientType: Double] {
+//        [:]
+//    }
     
     var showFooterText: Bool {
         true
