@@ -65,7 +65,7 @@ public struct FoodLabel<DataSource: FoodLabelDataSource>: View {
     }
     
     public var body: some View {
-        LazyVStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             header
             calories
             if viewModel.showRDAValues {
