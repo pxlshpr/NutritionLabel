@@ -20,8 +20,8 @@ extension FoodLabel {
         }
         return "\(Int(energy))"
     }
-    
-    func row(title: String, prefix: String? = nil, suffix: String? = nil, value: Double, rdaValue: Double? = nil, unit: String = "g", indentLevel: Int = 0, bold: Bool = false, includeDivider: Bool = true, prefixedWithIncludes: Bool = false) -> some View {
+
+    func row(title: String, prefix: String? = nil, value: Double, rdaValue: Double? = nil, unit: String = "g", indentLevel: Int = 0, bold: Bool = false, includeDivider: Bool = true, prefixedWithIncludes: Bool = false) -> some View {
         let prefixView = Group {
             if let prefix = prefix {
                 Text(prefix)
@@ -45,11 +45,6 @@ extension FoodLabel {
             Text(valueString(for: value, with: unit))
                 .fontWeight(.regular)
                 .font(.headline)
-            if let suffix = suffix {
-                Text(suffix)
-                    .fontWeight(bold ? .bold : .regular)
-                    .font(.headline)
-            }
         }
         
         let divider = Group {
@@ -65,12 +60,6 @@ extension FoodLabel {
             .frame(height: 6.0)
         }
         
-        let includesPrefixView = Group {
-            if prefixedWithIncludes {
-                Text("Includes")
-            }
-        }
-        
         return VStack(spacing: 0) {
             if includeDivider {
                 divider
@@ -82,10 +71,8 @@ extension FoodLabel {
                 }
                 VStack {
                     HStack {
-                        includesPrefixView
                         if prefixedWithIncludes {
-                            valueAndSuffix
-                            titleView
+                            Text("Includes  \(valueString(for: value, with: unit))  \(title)")
                         } else {
                             titleView
                             valueAndSuffix

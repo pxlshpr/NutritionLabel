@@ -98,6 +98,7 @@ public struct FoodLabelPreview: View {
     @StateObject var viewModel = ViewModel()
     public var body: some View {
         FoodLabel(dataSource: viewModel)
+            .frame(width: 350)
     }
     public init() { }
 }
@@ -109,7 +110,8 @@ extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
     
     var nutrients: [NutrientType : Double] {
         [
-            .saturatedFat: 5
+            .saturatedFat: 5,
+            .addedSugars: 35
         ]
     }
     
