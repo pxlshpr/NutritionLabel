@@ -53,6 +53,13 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
         }
         .padding(15)
         .border(borderColor, width: 5.0)
+        .onChange(of: dataSource.energyValue) { newValue in
+            if newValue.unit == .kj && showingEnergyInCalories {
+                withAnimation {
+                    showingEnergyInCalories = false
+                }
+            }
+        }
     }
 }
 

@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/pxlshpr/PrepUnits", from: "0.0.56"),
+        .package(url: "https://github.com/pxlshpr/PrepUnits", from: "0.0.57"),
         .package(url: "https://github.com/pxlshpr/FoodLabelScanner", from: "0.0.21"),
     ],
     targets: [
