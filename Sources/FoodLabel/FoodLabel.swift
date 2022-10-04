@@ -22,12 +22,12 @@ extension FoodLabelDataSource {
 public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
-    @ObservedObject var viewModel: DataSource
+    @ObservedObject var dataSource: DataSource
 
     @State var showingEnergyInCalories: Bool
 
     public init(dataSource: DataSource) {
-        self.viewModel = dataSource
+        self.dataSource = dataSource
         _showingEnergyInCalories = State(initialValue: dataSource.energyValue.unit != FoodLabelUnit.kj)
     }
     
@@ -35,19 +35,19 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
         VStack(alignment: .leading, spacing: 0) {
             header
             calories
-            if viewModel.showRDAValues {
+            if dataSource.showRDAValues {
                 Spacer().frame(height: 3)
             }
             macros
-            if viewModel.shouldShowMicronutrients {
+            if dataSource.shouldShowMicronutrients {
                 macrosMicrosSeparator
                 micros
             }
-            if viewModel.shouldShowCustomMicronutrients {
+            if dataSource.shouldShowCustomMicronutrients {
                 microsCustomSeparator
                 customMicros
             }
-            if viewModel.showFooterText {
+            if dataSource.showFooterText {
                 footer
             }
         }

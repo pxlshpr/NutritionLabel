@@ -14,7 +14,7 @@ extension FoodLabel {
     }
     
     var formattedEnergy: String {
-        let amount = showingEnergyInCalories ? viewModel.energyValue.energyAmountInCalories : viewModel.energyValue.energyAmountInKilojoules
+        let amount = showingEnergyInCalories ? dataSource.energyValue.energyAmountInCalories : dataSource.energyValue.energyAmountInKilojoules
         return "\(Int(amount))"
     }
 
@@ -75,7 +75,7 @@ extension FoodLabel {
                             valueAndSuffix
                         }
                         Spacer()
-                        if rdaValue != nil, viewModel.showRDAValues {
+                        if rdaValue != nil, dataSource.showRDAValues {
                             Text("\(Int((value/rdaValue!)*100.0))%")
                                 .fontWeight(.bold)
                                 .font(.headline)

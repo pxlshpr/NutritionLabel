@@ -18,7 +18,7 @@ extension FoodLabel {
             caloriesRow
             Spacer().frame(height: 10)
             rectangle(height: 8)
-            if viewModel.showRDAValues {
+            if dataSource.showRDAValues {
                 Spacer().frame(height: 6)
             }
         }
@@ -90,7 +90,7 @@ extension FoodLabel {
                 .font(.title3)
             Spacer()
 //            Text(dataSource.amountString(withDetails: true, parentMultiplier: 1))
-            Text(viewModel.amountPerString)
+            Text(dataSource.amountPerString)
                 .fontWeight(.bold)
                 .font(.title3)
                 .multilineTextAlignment(.trailing)
@@ -135,7 +135,7 @@ extension FoodLabel {
     
     @ViewBuilder
     var percentHeaderRow: some View {
-        if viewModel.showRDAValues {
+        if dataSource.showRDAValues {
             Group {
                 HStack(alignment: .top, spacing: 0) {
                     Spacer()

@@ -4,7 +4,7 @@ import PrepUnits
 extension FoodLabel {
     
     var proteinRow: some View {
-        row(title: "Protein", value: viewModel.proteinAmount, rdaValue: MacroRDA.protein, unit: "g", bold: true)
+        row(title: "Protein", value: dataSource.proteinAmount, rdaValue: MacroRDA.protein, unit: "g", bold: true)
     }
     
     @ViewBuilder
@@ -13,7 +13,7 @@ extension FoodLabel {
         let title = type == .transFat ? "Fat" : type.description
         let bold = type == .cholesterol || type == .sodium
         
-        if let value = viewModel.nutrientAmount(for: type) {
+        if let value = dataSource.nutrientAmount(for: type) {
             row(title: title,
                 prefix: prefix,
                 value: value,
@@ -39,7 +39,7 @@ extension FoodLabel {
 
     var fatRows: some View {
         Group {
-            row(title: "Total Fat", value: viewModel.fatAmount, rdaValue: MacroRDA.fat, unit: "g", bold: true)
+            row(title: "Total Fat", value: dataSource.fatAmount, rdaValue: MacroRDA.fat, unit: "g", bold: true)
             nutrientRow(forType: .saturatedFat, indentLevel: 1)
             nutrientRow(forType: .polyunsaturatedFat, indentLevel: 1)
             nutrientRow(forType: .monounsaturatedFat, indentLevel: 1)
@@ -56,7 +56,7 @@ extension FoodLabel {
     
     var carbRows: some View {
         Group {
-            row(title: "Total Carbohydrate", value: viewModel.carbAmount, rdaValue: MacroRDA.carb, unit: "g", bold: true)
+            row(title: "Total Carbohydrate", value: dataSource.carbAmount, rdaValue: MacroRDA.carb, unit: "g", bold: true)
             nutrientRow(forType: .dietaryFiber, indentLevel: 1)
             nutrientRow(forType: .solubleFiber, indentLevel: 2)
             nutrientRow(forType: .insolubleFiber, indentLevel: 2)
