@@ -92,6 +92,7 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
     init(dataSource: DataSource) {
         self.viewModel = dataSource
     }
+
     
     @State var energyInCalories: Bool = true
     
