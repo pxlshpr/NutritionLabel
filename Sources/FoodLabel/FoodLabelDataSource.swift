@@ -16,7 +16,7 @@ public protocol FoodLabelDataSource: ObservableObject {
     var amountPerString: String { get }
 }
 
-extension FoodLabelDataSource {
+public extension FoodLabelDataSource {
     
     var allowTapToChangeEnergyUnit: Bool {
         true
