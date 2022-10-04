@@ -100,7 +100,7 @@ extension FoodLabel {
     
     var caloriesRow: some View {
         HStack(alignment: .bottom) {
-            Text(energyInCalories ? "Calories" : "Energy")
+            Text(showingEnergyInCalories ? "Calories" : "Energy")
                 .fontWeight(.black)
                 .font(.title)
                 .transition(.opacity)
@@ -110,7 +110,7 @@ extension FoodLabel {
         .onTapGesture {
             Haptics.feedback(style: .medium)
             withAnimation {
-                energyInCalories.toggle()
+                showingEnergyInCalories.toggle()
             }
         }
     }
@@ -122,7 +122,7 @@ extension FoodLabel {
                 .font(.largeTitle)
                 .multilineTextAlignment(.trailing)
                 .transition(.opacity)
-            if !energyInCalories {
+            if !showingEnergyInCalories {
                 Text("kJ")
                     .fontWeight(.bold)
                     .font(.title3)

@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftHaptics
 import PrepUnits
+import FoodLabelScanner
 
 extension FoodLabelDataSource {
     var shouldShowMicronutrients: Bool {
@@ -12,76 +13,10 @@ extension FoodLabelDataSource {
         false
     }
     
-    var amountPerString: String {
-        amountPerString
-    }
-    
-    var energyAmount: Double {
-        energyAmount
-    }
-    var proteinAmount: Double {
-        proteinAmount
-    }
-    var carbAmount: Double {
-        carbAmount
-    }
-    var fatAmount: Double {
-        fatAmount
-    }
-    
     func nutrientAmount(for type: NutrientType) -> Double? {
         nutrients[type]
     }
 }
-//extension FoodLabel {
-//    class ViewModel<DataSource: FoodLabelDataSource>: ObservableObject {
-//        @Published var dataSource: DataSource
-//
-//        init(dataSource: DataSource) {
-//            self.dataSource = dataSource
-//        }
-//    }
-//}
-//
-//extension FoodLabel.ViewModel {
-//    var shouldShowMicronutrients: Bool {
-//        !dataSource.nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
-//    }
-//
-//    var shouldShowCustomMicronutrients: Bool {
-//        //TODO: Fix this when custom micros are brought back
-//        false
-//    }
-//
-//    var showFooterText: Bool {
-//        dataSource.showFooterText
-//    }
-//
-//    var showRDAValues: Bool {
-//        dataSource.showRDAValues
-//    }
-//
-//    var amountPerString: String {
-//        dataSource.amountPerString
-//    }
-//
-//    var energyAmount: Double {
-//        dataSource.energyAmount
-//    }
-//    var proteinAmount: Double {
-//        dataSource.proteinAmount
-//    }
-//    var carbAmount: Double {
-//        dataSource.carbAmount
-//    }
-//    var fatAmount: Double {
-//        dataSource.fatAmount
-//    }
-//
-//    func nutrientAmount(for type: NutrientType) -> Double? {
-//        dataSource.nutrients[type]
-//    }
-//}
 
 //public struct FoodLabel<DataSource: FoodLabelDataSource>: View {
 public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource {
@@ -89,10 +24,11 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
     
     @ObservedObject var viewModel: DataSource
 
-    @State var energyInCalories: Bool = true
+    @State var showingEnergyInCalories: Bool
 
     public init(dataSource: DataSource) {
         self.viewModel = dataSource
+        _showingEnergyInCalories = State(initialValue: dataSource.energyValue.unit != FoodLabelUnit.kj)
     }
     
     public var body: some View {
@@ -154,8 +90,8 @@ extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
         false
     }
     
-    var energyAmount: Double {
-        235
+    var energyValue: FoodLabelValue {
+        FoodLabelValue(amount: 235, unit: .kj)
     }
     
     var carbAmount: Double {

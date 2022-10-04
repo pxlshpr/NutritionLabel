@@ -1,8 +1,9 @@
 import Foundation
 import PrepUnits
+import FoodLabelScanner
 
 public protocol FoodLabelDataSource: ObservableObject {
-    var energyAmount: Double { get }
+    var energyValue: FoodLabelValue { get }
     var carbAmount: Double { get }
     var fatAmount: Double { get }
     var proteinAmount: Double { get }

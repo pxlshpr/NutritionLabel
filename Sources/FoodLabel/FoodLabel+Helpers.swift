@@ -14,11 +14,8 @@ extension FoodLabel {
     }
     
     var formattedEnergy: String {
-        var energy = viewModel.energyAmount
-        if !energyInCalories {
-            energy = EnergyUnit.convertToKilojules(fromKilocalories: energy)
-        }
-        return "\(Int(energy))"
+        let amount = showingEnergyInCalories ? viewModel.energyValue.energyAmountInCalories : viewModel.energyValue.energyAmountInKilojoules
+        return "\(Int(amount))"
     }
 
     func row(title: String, prefix: String? = nil, value: Double, rdaValue: Double? = nil, unit: String = "g", indentLevel: Int = 0, bold: Bool = false, includeDivider: Bool = true, prefixedWithIncludes: Bool = false) -> some View {
