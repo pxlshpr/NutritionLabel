@@ -2,19 +2,9 @@ import SwiftUI
 import SwiftHaptics
 import PrepUnits
 
-extension FoodLabel {
-    class ViewModel<DataSource: FoodLabelDataSource>: ObservableObject {
-        @Published var dataSource: DataSource
-        
-        init(dataSource: DataSource) {
-            self.dataSource = dataSource
-        }
-    }
-}
-
-extension FoodLabel.ViewModel {
+extension FoodLabelDataSource {
     var shouldShowMicronutrients: Bool {
-        !dataSource.nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
+        !nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
     }
     
     var shouldShowCustomMicronutrients: Bool {
@@ -22,47 +12,88 @@ extension FoodLabel.ViewModel {
         false
     }
     
-    var showFooterText: Bool {
-        dataSource.showFooterText
-    }
-
-    var showRDAValues: Bool {
-        dataSource.showRDAValues
-    }
-
     var amountPerString: String {
-        dataSource.amountPerString
+        amountPerString
     }
     
     var energyAmount: Double {
-        dataSource.energyAmount
+        energyAmount
     }
     var proteinAmount: Double {
-        dataSource.proteinAmount
+        proteinAmount
     }
     var carbAmount: Double {
-        dataSource.carbAmount
+        carbAmount
     }
     var fatAmount: Double {
-        dataSource.fatAmount
+        fatAmount
     }
     
     func nutrientAmount(for type: NutrientType) -> Double? {
-        dataSource.nutrients[type]
+        nutrients[type]
     }
 }
+//extension FoodLabel {
+//    class ViewModel<DataSource: FoodLabelDataSource>: ObservableObject {
+//        @Published var dataSource: DataSource
+//
+//        init(dataSource: DataSource) {
+//            self.dataSource = dataSource
+//        }
+//    }
+//}
+//
+//extension FoodLabel.ViewModel {
+//    var shouldShowMicronutrients: Bool {
+//        !dataSource.nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
+//    }
+//
+//    var shouldShowCustomMicronutrients: Bool {
+//        //TODO: Fix this when custom micros are brought back
+//        false
+//    }
+//
+//    var showFooterText: Bool {
+//        dataSource.showFooterText
+//    }
+//
+//    var showRDAValues: Bool {
+//        dataSource.showRDAValues
+//    }
+//
+//    var amountPerString: String {
+//        dataSource.amountPerString
+//    }
+//
+//    var energyAmount: Double {
+//        dataSource.energyAmount
+//    }
+//    var proteinAmount: Double {
+//        dataSource.proteinAmount
+//    }
+//    var carbAmount: Double {
+//        dataSource.carbAmount
+//    }
+//    var fatAmount: Double {
+//        dataSource.fatAmount
+//    }
+//
+//    func nutrientAmount(for type: NutrientType) -> Double? {
+//        dataSource.nutrients[type]
+//    }
+//}
 
-public struct FoodLabel<DataSource: FoodLabelDataSource>: View {
-    
+//public struct FoodLabel<DataSource: FoodLabelDataSource>: View {
+public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
-    @StateObject var viewModel: ViewModel<DataSource>
+    @ObservedObject var viewModel: DataSource
 
-    @State var energyInCalories: Bool = true
-    
-    public init(dataSource: DataSource) {
-        _viewModel = StateObject(wrappedValue: ViewModel(dataSource: dataSource))
+    init(dataSource: DataSource) {
+        self.viewModel = dataSource
     }
+    
+    @State var energyInCalories: Bool = true
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
