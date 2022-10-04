@@ -3,22 +3,6 @@ import SwiftHaptics
 import PrepUnits
 import FoodLabelScanner
 
-extension FoodLabelDataSource {
-    var shouldShowMicronutrients: Bool {
-        !nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
-    }
-    
-    var shouldShowCustomMicronutrients: Bool {
-        //TODO: Fix this when custom micros are brought back
-        false
-    }
-    
-    func nutrientAmount(for type: NutrientType) -> Double? {
-        nutrients[type]
-    }
-}
-
-//public struct FoodLabel<DataSource: FoodLabelDataSource>: View {
 public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
@@ -53,13 +37,13 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
         }
         .padding(15)
         .border(borderColor, width: 5.0)
-        .onChange(of: dataSource.energyValue) { newValue in
-            if newValue.unit == .kj && showingEnergyInCalories {
-                withAnimation {
-                    showingEnergyInCalories = false
-                }
-            }
-        }
+//        .onChange(of: dataSource.energyValue) { newValue in
+//            if newValue.unit == .kj && showingEnergyInCalories {
+//                withAnimation {
+//                    showingEnergyInCalories = false
+//                }
+//            }
+//        }
     }
 }
 

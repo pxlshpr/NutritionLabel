@@ -11,14 +11,16 @@ public protocol FoodLabelDataSource: ObservableObject {
     var nutrients: [NutrientType: Double] { get }
     var showFooterText: Bool { get }
     var showRDAValues: Bool { get }
+    var allowTapToChangeEnergyUnit: Bool { get }
     
     var amountPerString: String { get }
 }
 
 extension FoodLabelDataSource {
-//    var nutrients: [NutrientType: Double] {
-//        [:]
-//    }
+    
+    var allowTapToChangeEnergyUnit: Bool {
+        true
+    }
     
     var showFooterText: Bool {
         true
@@ -26,5 +28,18 @@ extension FoodLabelDataSource {
     
     var showRDAValues: Bool {
         true
+    }
+    
+    var shouldShowMicronutrients: Bool {
+        !nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
+    }
+    
+    var shouldShowCustomMicronutrients: Bool {
+        //TODO: Fix this when custom micros are brought back
+        false
+    }
+    
+    func nutrientAmount(for type: NutrientType) -> Double? {
+        nutrients[type]
     }
 }

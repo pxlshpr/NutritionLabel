@@ -108,7 +108,8 @@ extension FoodLabel {
             labelCaloriesAmount
         }
         .onTapGesture {
-            Haptics.feedback(style: .medium)
+            guard dataSource.allowTapToChangeEnergyUnit else { return }
+            Haptics.feedback(style: .soft)
             withAnimation {
                 showingEnergyInCalories.toggle()
             }
