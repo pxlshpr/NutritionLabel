@@ -38,9 +38,16 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
         .padding(15)
         .border(borderColor, width: 5.0)
         .onChange(of: dataSource.energyValue) { newValue in
-            if newValue.unit == .kj && showingEnergyInCalories {
+            
+            let shouldToggle: Bool
+            if newValue.unit == .kj {
+                shouldToggle = showingEnergyInCalories
+            } else {
+                shouldToggle = !showingEnergyInCalories
+            }
+            if shouldToggle {
                 withAnimation {
-                    showingEnergyInCalories = false
+                    showingEnergyInCalories.toggle()
                 }
             }
         }
