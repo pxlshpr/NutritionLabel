@@ -89,12 +89,11 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
     
     @ObservedObject var viewModel: DataSource
 
-    init(dataSource: DataSource) {
+    @State var energyInCalories: Bool = true
+
+    public init(dataSource: DataSource) {
         self.viewModel = dataSource
     }
-
-    
-    @State var energyInCalories: Bool = true
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
