@@ -107,13 +107,15 @@ extension FoodLabel {
             Spacer()
             labelCaloriesAmount
         }
-        .onTapGesture {
-            guard dataSource.allowTapToChangeEnergyUnit else { return }
-            Haptics.feedback(style: .soft)
-            withAnimation {
-                showingEnergyInCalories.toggle()
-            }
-        }
+        .if(dataSource.allowTapToChangeEnergyUnit, transform: { view in
+            view
+                .onTapGesture {
+                    Haptics.feedback(style: .soft)
+                    withAnimation {
+                        showingEnergyInCalories.toggle()
+                    }
+                }
+        })
     }
     
     var labelCaloriesAmount: some View {
