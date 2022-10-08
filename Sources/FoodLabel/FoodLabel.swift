@@ -95,6 +95,7 @@ extension FoodLabel {
     
     var fatRows: some View {
         Group {
+            
             row(title: "Total Fat",
                 value: dataSource.fatAmount,
                 rdaValue: MacroRDA.fat,
