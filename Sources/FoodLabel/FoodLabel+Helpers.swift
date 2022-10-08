@@ -88,6 +88,10 @@ extension FoodLabel {
     }
     
     func valueString(for value: Double, with unit: String) -> String {
+        guard dataSource.numberOfDecimalPlaces == 0 else {
+            return "\(value.rounded(toPlaces: dataSource.numberOfDecimalPlaces).cleanAmount)" + unit
+        }
+        
         if value < 0.5 {
             if value == 0 {
                 return "0" + unit

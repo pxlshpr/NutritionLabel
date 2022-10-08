@@ -14,9 +14,14 @@ public protocol FoodLabelDataSource: ObservableObject {
     var allowTapToChangeEnergyUnit: Bool { get }
     
     var amountPerString: String { get }
+    var numberOfDecimalPlaces: Int { get }
 }
 
 public extension FoodLabelDataSource {
+    
+    var numberOfDecimalPlaces: Int {
+        1
+    }
     
     var allowTapToChangeEnergyUnit: Bool {
         true

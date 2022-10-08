@@ -16,7 +16,8 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
     }
     
     public var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        //TODO: Spacing here seems to fix the lines issue
+        VStack(alignment: .leading, spacing: 0.5) {
             header
             calories
             if dataSource.showRDAValues {
@@ -93,7 +94,7 @@ extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
     }
     
     var carbAmount: Double {
-        45
+        45.5
     }
     
     var fatAmount: Double {
