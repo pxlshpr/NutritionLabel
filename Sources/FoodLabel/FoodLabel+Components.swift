@@ -34,21 +34,6 @@ extension FoodLabel {
         }
     }
     
-    var macrosMicrosSeparator: some View {
-        Group {
-            Spacer().frame(height: 6)
-            rectangle(height: 15)
-//            Spacer().frame(height: 3)
-        }
-    }
-
-    var microsCustomSeparator: some View {
-        Group {
-            Spacer().frame(height: 6)
-            rectangle(height: 8)
-        }
-    }
-
     var micros: some View {
         Group {
             vitaminRows

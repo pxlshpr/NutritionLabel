@@ -181,7 +181,19 @@ extension FoodLabel {
         }
     }
     
-
+    var microsCustomSeparator: some View {
+        Group {
+            Spacer().frame(height: 6)
+            rectangle(height: 8)
+        }
+    }
+    
+    var macrosMicrosSeparator: some View {
+        Group {
+            rectangle(height: 15)
+            Spacer().frame(height: 5)
+        }
+    }
 }
 
 extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
@@ -193,7 +205,7 @@ extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
         [
             .saturatedFat: 5,
             .addedSugars: 35,
-//            .biotin: 10.5,
+            .biotin: 10.5,
 //            .transFat: 50,
 //            .monounsaturatedFat: 20
         ]
