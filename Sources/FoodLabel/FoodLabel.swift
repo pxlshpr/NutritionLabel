@@ -17,7 +17,7 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
     
     public var body: some View {
         //TODO: Spacing here seems to fix the lines issue
-        VStack(alignment: .leading, spacing: 0.5) {
+        VStack(alignment: .leading, spacing: 0) {
             header
             calories
             if dataSource.showRDAValues {
@@ -69,6 +69,120 @@ public struct FoodLabelPreview: View {
     public init() { }
 }
 
+extension FoodLabel {
+    func rectangle(height: CGFloat) -> some View {
+//        Rectangle()
+//            .frame(height: height)
+//            .foregroundColor(borderColor)
+//        borderColor
+//            .frame(height: height)
+        GeometryReader { geometry in
+            Path() { path in
+                path.move(to: CGPoint(x: 0, y: 0))
+                path.addLine(to: CGPoint(x: 0, y: height))
+                path.addLine(to: CGPoint(x: geometry.size.width, y: height))
+                path.addLine(to: CGPoint(x: geometry.size.width, y: 0))
+//                path.addLine(to: CGPoint(x: 200, y: height))
+//                path.addLine(to: CGPoint(x: 200, y: 0))
+                path.closeSubpath()
+            }
+            .fill(borderColor)
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.top, 5)
+//        .background(.yellow)
+    }
+    
+    var fatRows: some View {
+        Group {
+            row(title: "Total Fat",
+                value: dataSource.fatAmount,
+                rdaValue: MacroRDA.fat,
+                unit: "g",
+                bold: true,
+                /// Don't include a divider above Fat if we're not showing RDA values as there won't be a % Daily VAlue header to have in it
+                includeDivider: dataSource.showRDAValues
+            )
+            nutrientRow(forType: .saturatedFat, indentLevel: 1)
+            nutrientRow(forType: .polyunsaturatedFat, indentLevel: 1)
+            nutrientRow(forType: .monounsaturatedFat, indentLevel: 1)
+            nutrientRow(forType: .transFat, indentLevel: 1)
+        }
+    }
+    
+    func row(title: String, prefix: String? = nil, value: Double, rdaValue: Double? = nil, unit: String = "g", indentLevel: Int = 0, bold: Bool = false, includeDivider: Bool = true, prefixedWithIncludes: Bool = false) -> some View {
+        let prefixView = Group {
+            if let prefix = prefix {
+                Text(prefix)
+                    .fontWeight(.regular)
+                    .font(.headline)
+                    .italic()
+                Spacer().frame(width: 3)
+            }
+        }
+        
+        let titleView = Group {
+            HStack(spacing: 0) {
+                prefixView
+                Text(title)
+                    .fontWeight(bold ? .black : .regular)
+                    .font(.headline)
+            }
+        }
+        
+        let valueAndSuffix = Group {
+            Text(valueString(for: value, with: unit))
+                .fontWeight(.regular)
+                .font(.headline)
+        }
+        
+        let divider = Group {
+            HStack {
+                if indentLevel > 1 {
+                    Spacer().frame(width: CGFloat(indentLevel) * 20.0)
+                }
+                VStack {
+                    rectangle(height: 0.3)
+//                    Spacer().frame(height: 0)
+                }
+            }
+            .frame(height: 6.0)
+        }
+        
+        return VStack(spacing: 0) {
+            if includeDivider {
+                divider
+            } else {
+                Spacer().frame(height: 5)
+            }
+            HStack {
+                if indentLevel > 0 {
+                    Spacer().frame(width: CGFloat(indentLevel) * 20.0)
+                }
+                VStack {
+                    HStack {
+                        if prefixedWithIncludes {
+                            Text("Includes  \(valueString(for: value, with: unit))  \(title)")
+                        } else {
+                            titleView
+                            valueAndSuffix
+                        }
+                        Spacer()
+                        if rdaValue != nil, dataSource.showRDAValues {
+                            Text("\(Int((value/rdaValue!)*100.0))%")
+                                .fontWeight(.bold)
+                                .font(.headline)
+                        }
+                    }
+                }
+            }
+            Spacer().frame(height: 5)
+        }
+    }
+    
+
+}
+
 extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
     var amountPerString: String {
         "1 serving (1 cup, chopped)"
@@ -77,7 +191,10 @@ extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
     var nutrients: [NutrientType : Double] {
         [
             .saturatedFat: 5,
-            .addedSugars: 35
+            .addedSugars: 35,
+//            .biotin: 10.5,
+//            .transFat: 50,
+//            .monounsaturatedFat: 20
         ]
     }
     

@@ -37,16 +37,6 @@ extension FoodLabel {
 //        }
 //    }
 
-    var fatRows: some View {
-        Group {
-            row(title: "Total Fat", value: dataSource.fatAmount, rdaValue: MacroRDA.fat, unit: "g", bold: true)
-            nutrientRow(forType: .saturatedFat, indentLevel: 1)
-            nutrientRow(forType: .polyunsaturatedFat, indentLevel: 1)
-            nutrientRow(forType: .monounsaturatedFat, indentLevel: 1)
-            nutrientRow(forType: .transFat, indentLevel: 1)
-        }
-    }
-    
     var highlightedMacroRows: some View {
         Group {
             nutrientRow(forType: .cholesterol, indentLevel: 0)
