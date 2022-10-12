@@ -55,6 +55,7 @@ extension FoodLabel {
                 Text("*")
                 Text("The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.")
             }
+            .foregroundColor(.primary)
             .font(.footnote)
             Spacer().frame(height: 9)
         }
@@ -66,6 +67,7 @@ extension FoodLabel {
         Text("Nutrition Facts")
             .fontWeight(.black)
             .font(.largeTitle)
+            .foregroundColor(.primary)
     }
     
     var amountPerRow: some View {
@@ -73,12 +75,14 @@ extension FoodLabel {
             Text("Amount per")
                 .fontWeight(.bold)
                 .font(.title3)
+                .foregroundColor(.primary)
             Spacer()
 //            Text(dataSource.amountString(withDetails: true, parentMultiplier: 1))
             Text(dataSource.amountPerString)
                 .fontWeight(.bold)
                 .font(.title3)
                 .multilineTextAlignment(.trailing)
+                .foregroundColor(.primary)
                 .lineLimit(3)
         }
     }
@@ -88,6 +92,7 @@ extension FoodLabel {
             Text(showingEnergyInCalories ? "Calories" : "Energy")
                 .fontWeight(.black)
                 .font(.title)
+                .foregroundColor(.primary)
                 .transition(.opacity)
             Spacer()
             labelCaloriesAmount
@@ -108,12 +113,14 @@ extension FoodLabel {
             Text(formattedEnergy)
                 .fontWeight(.black)
                 .font(.largeTitle)
+                .foregroundColor(.primary)
                 .multilineTextAlignment(.trailing)
                 .transition(.opacity)
             if !showingEnergyInCalories {
                 Text("kJ")
                     .fontWeight(.bold)
                     .font(.title3)
+                    .foregroundColor(.primary)
                     .multilineTextAlignment(.leading)
                     .offset(y: 2)
                     .transition(.scale)
@@ -129,9 +136,11 @@ extension FoodLabel {
                     Spacer()
                     Text("% Daily Value")
                         .fontWeight(.semibold)
+                        .foregroundColor(.primary)
                         .font(.subheadline)
                     Text("*")
                         .font(.caption)
+                        .foregroundColor(.primary)
                         .fontWeight(.semibold)
                 }
                 Spacer().frame(height: 5)

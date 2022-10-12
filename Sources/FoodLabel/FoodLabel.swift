@@ -118,6 +118,7 @@ extension FoodLabel {
                     .fontWeight(.regular)
                     .font(.headline)
                     .italic()
+                    .foregroundColor(.primary)
                 Spacer().frame(width: 3)
             }
         }
@@ -128,6 +129,7 @@ extension FoodLabel {
                 Text(title)
                     .fontWeight(bold ? .black : .regular)
                     .font(.headline)
+                    .foregroundColor(.primary)
             }
         }
         
@@ -135,6 +137,7 @@ extension FoodLabel {
             Text(valueString(for: value, with: unit))
                 .fontWeight(.regular)
                 .font(.headline)
+                .foregroundColor(.primary)
         }
         
         let divider = Group {
@@ -164,6 +167,7 @@ extension FoodLabel {
                     HStack {
                         if prefixedWithIncludes {
                             Text("Includes  \(valueString(for: value, with: unit))  \(title)")
+                                .foregroundColor(.primary)
                         } else {
                             titleView
                             valueAndSuffix
@@ -173,6 +177,7 @@ extension FoodLabel {
                             Text("\(Int((value/rdaValue!)*100.0))%")
                                 .fontWeight(.bold)
                                 .font(.headline)
+                                .foregroundColor(.primary)
                         }
                     }
                 }
