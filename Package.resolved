@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/FoodLabelScanner",
       "state" : {
-        "revision" : "8509bfab86d94e5e354bcf949e20dba5995a64ad",
-        "version" : "0.0.22"
+        "revision" : "56f0745c7344c022de1414719d4ba1c7e15b7014",
+        "version" : "0.0.69"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/PrepUnits",
       "state" : {
-        "revision" : "64b15198ee18483d65f0f440b4d1df7573755402",
-        "version" : "0.0.58"
+        "revision" : "c9520a3752f49f94597d25e716a95480f78d24c9",
+        "version" : "0.0.102"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/SwiftSugar",
       "state" : {
-        "revision" : "70cf7f766d611ec114a67c059b4bdbfcabb8865a",
-        "version" : "0.0.57"
+        "revision" : "ec4f4c280c41c6c99741e065d635c470926d75d5",
+        "version" : "0.0.69"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/SwiftUISugar",
       "state" : {
-        "revision" : "e0222ce74a9b3b549e02076b2552af282300ae3e",
-        "version" : "0.0.169"
+        "revision" : "439700ba56418091d97d3b2d18317d7f109f216b",
+        "version" : "0.0.194"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/VisionSugar",
       "state" : {
-        "revision" : "ad0cd07cb505aeba234ad7a7296956c433f88bad",
-        "version" : "0.0.54"
+        "revision" : "240da8f4eff92d36429472a8ea63144f262174b7",
+        "version" : "0.0.72"
       }
     }
   ],

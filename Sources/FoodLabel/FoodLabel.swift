@@ -210,7 +210,7 @@ extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
         [
             .saturatedFat: 5,
             .addedSugars: 35,
-            .biotin: 10.5,
+            .vitaminB7_biotin: 10.5,
 //            .transFat: 50,
 //            .monounsaturatedFat: 20
         ]
