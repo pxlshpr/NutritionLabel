@@ -5,17 +5,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/FoodLabelScanner",
       "state" : {
-        "revision" : "56f0745c7344c022de1414719d4ba1c7e15b7014",
-        "version" : "0.0.69"
+        "revision" : "3f3c6b89773cf84b9887f555de196e30eab9b5ec",
+        "version" : "0.0.71"
       }
     },
     {
-      "identity" : "prepunits",
+      "identity" : "prepdatatypes",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pxlshpr/PrepUnits",
+      "location" : "https://github.com/pxlshpr/PrepDataTypes",
       "state" : {
-        "revision" : "c9520a3752f49f94597d25e716a95480f78d24c9",
-        "version" : "0.0.102"
+        "revision" : "65a830f3dcadf2b86cfd7322e1f6b23be63bd08f",
+        "version" : "0.0.9"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/SwiftSugar",
       "state" : {
-        "revision" : "ec4f4c280c41c6c99741e065d635c470926d75d5",
-        "version" : "0.0.69"
+        "revision" : "8f6e2615bee4969dd629c09cae9d900b52081b02",
+        "version" : "0.0.74"
       }
     },
     {

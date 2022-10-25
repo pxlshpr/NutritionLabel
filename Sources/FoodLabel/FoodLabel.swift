@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftHaptics
-import PrepUnits
+import PrepDataTypes
 import FoodLabelScanner
 
 public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource {

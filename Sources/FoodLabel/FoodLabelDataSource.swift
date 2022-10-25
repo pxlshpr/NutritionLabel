@@ -1,5 +1,5 @@
 import Foundation
-import PrepUnits
+import PrepDataTypes
 import FoodLabelScanner
 
 public protocol FoodLabelDataSource: ObservableObject {
