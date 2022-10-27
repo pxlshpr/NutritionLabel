@@ -8,13 +8,13 @@ extension FoodLabel {
     }
     
     var formattedEnergy: String {
-        let amount = showingEnergyInCalories ? dataSource.energyValue.energyAmountInCalories : dataSource.energyValue.energyAmountInKilojoules
+        let amount = showingEnergyInCalories ? energyValue.energyAmountInCalories : energyValue.energyAmountInKilojoules
         return "\(Int(amount))"
     }
 
     func valueString(for value: Double, with unit: String) -> String {
-        guard dataSource.numberOfDecimalPlaces == 0 else {
-            return "\(value.rounded(toPlaces: dataSource.numberOfDecimalPlaces).cleanAmount)" + unit
+        guard numberOfDecimalPlaces == 0 else {
+            return "\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)" + unit
         }
         
         if value < 0.5 {

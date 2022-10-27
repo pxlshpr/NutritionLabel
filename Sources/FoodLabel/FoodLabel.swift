@@ -3,16 +3,52 @@ import SwiftHaptics
 import PrepDataTypes
 import FoodLabelScanner
 
-public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource {
+public struct FoodLabel: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
-    @ObservedObject var dataSource: DataSource
-
+    @Binding var energyValue: FoodLabelValue
+    @Binding var carb: Double
+    @Binding var fat: Double
+    @Binding var protein: Double
+    @Binding var nutrients: [NutrientType:Double]
+    @Binding var amountPerString: String
+    
+    let showFooterText: Bool
+    let showRDAValues: Bool
+    let allowTapToChangeEnergyUnit: Bool
+    let numberOfDecimalPlaces: Int
+    
+    let shouldShowCustomMicronutrients: Bool = false
+    
     @State var showingEnergyInCalories: Bool
-
-    public init(dataSource: DataSource) {
-        self.dataSource = dataSource
-        _showingEnergyInCalories = State(initialValue: dataSource.energyValue.unit != FoodLabelUnit.kj)
+    
+    public init(
+        energyValue: Binding<FoodLabelValue>,
+        carb: Binding<Double>,
+        fat: Binding<Double>,
+        protein: Binding<Double>,
+        nutrients: Binding<[NutrientType:Double]>,
+        amountPerString: Binding<String>,
+        
+        showFooterText: Bool = false,
+        showRDAValues: Bool = false,
+        allowTapToChangeEnergyUnit: Bool = false,
+        numberOfDecimalPlaces: Int = 1
+    ) {
+        _energyValue = energyValue
+        _carb = carb
+        _fat = fat
+        _protein = protein
+        _nutrients = nutrients
+        _amountPerString = amountPerString
+        
+        self.showFooterText = showFooterText
+        self.showRDAValues = showRDAValues
+        self.allowTapToChangeEnergyUnit = allowTapToChangeEnergyUnit
+        self.numberOfDecimalPlaces = numberOfDecimalPlaces
+        
+        let isKcal = energyValue.wrappedValue.unit != FoodLabelUnit.kj
+        _showingEnergyInCalories = State(initialValue: isKcal)
     }
     
     public var body: some View {
@@ -20,25 +56,25 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
         VStack(alignment: .leading, spacing: 0) {
             header
             calories
-            if dataSource.showRDAValues {
+            if showRDAValues {
                 Spacer().frame(height: 3)
             }
             macros
-            if dataSource.shouldShowMicronutrients {
+            if shouldShowMicronutrients {
                 macrosMicrosSeparator
                 micros
             }
-            if dataSource.shouldShowCustomMicronutrients {
+            if shouldShowCustomMicronutrients {
                 microsCustomSeparator
                 customMicros
             }
-            if dataSource.showFooterText {
+            if showFooterText {
                 footer
             }
         }
         .padding(15)
         .border(borderColor, width: 5.0)
-        .onChange(of: dataSource.energyValue) { newValue in
+        .onChange(of: energyValue) { newValue in
             
             let shouldToggle: Bool
             if newValue.unit == .kj {
@@ -53,21 +89,29 @@ public struct FoodLabel<DataSource>: View where DataSource: FoodLabelDataSource 
             }
         }
     }
-}
-
-public struct FoodLabelPreview: View {
     
-    class ViewModel: ObservableObject {
-        
+    var shouldShowMicronutrients: Bool {
+        !nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
     }
 
-    @StateObject var viewModel = ViewModel()
-    public var body: some View {
-        FoodLabel(dataSource: viewModel)
-            .frame(width: 350)
+    func nutrientAmount(for type: NutrientType) -> Double? {
+        nutrients[type]
     }
-    public init() { }
 }
+
+//public struct FoodLabelPreview: View {
+//
+//    class ViewModel: ObservableObject {
+//
+//    }
+//
+//    @StateObject var viewModel = ViewModel()
+//    public var body: some View {
+//        FoodLabel(dataSource: viewModel)
+//            .frame(width: 350)
+//    }
+//    public init() { }
+//}
 
 extension FoodLabel {
     func rectangle(height: CGFloat) -> some View {
@@ -97,12 +141,12 @@ extension FoodLabel {
         Group {
             
             row(title: "Total Fat",
-                value: dataSource.fatAmount,
+                value: fat,
                 rdaValue: MacroRDA.fat,
                 unit: "g",
                 bold: true,
                 /// Don't include a divider above Fat if we're not showing RDA values as there won't be a % Daily VAlue header to have in it
-                includeDivider: dataSource.showRDAValues
+                includeDivider: showRDAValues
             )
             nutrientRow(forType: .saturatedFat, indentLevel: 1)
             nutrientRow(forType: .polyunsaturatedFat, indentLevel: 1)
@@ -173,7 +217,7 @@ extension FoodLabel {
                             valueAndSuffix
                         }
                         Spacer()
-                        if rdaValue != nil, dataSource.showRDAValues {
+                        if rdaValue != nil, showRDAValues {
                             Text("\(Int((value/rdaValue!)*100.0))%")
                                 .fontWeight(.bold)
                                 .font(.headline)
@@ -201,48 +245,48 @@ extension FoodLabel {
     }
 }
 
-extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
-    var amountPerString: String {
-        "1 serving (1 cup, chopped)"
-    }
-    
-    var nutrients: [NutrientType : Double] {
-        [
-            .saturatedFat: 5,
-            .addedSugars: 35,
-            .vitaminB7_biotin: 10.5,
-//            .transFat: 50,
-//            .monounsaturatedFat: 20
-        ]
-    }
-    
-    var showRDAValues: Bool {
-        false
-    }
-    
-    var showFooterText: Bool {
-        false
-    }
-    
-    var energyValue: FoodLabelValue {
-        FoodLabelValue(amount: 235, unit: .kj)
-    }
-    
-    var carbAmount: Double {
-        45.5
-    }
-    
-    var fatAmount: Double {
-        8
-    }
-    
-    var proteinAmount: Double {
-        12
-    }
-}
-
-struct FoodLabel_Previews: PreviewProvider {
-    static var previews: some View {
-        FoodLabelPreview()
-    }
-}
+//extension FoodLabelPreview.ViewModel: FoodLabelDataSource {
+//    var amountPerString: String {
+//        "1 serving (1 cup, chopped)"
+//    }
+//    
+//    var nutrients: [NutrientType : Double] {
+//        [
+//            .saturatedFat: 5,
+//            .addedSugars: 35,
+//            .vitaminB7_biotin: 10.5,
+////            .transFat: 50,
+////            .monounsaturatedFat: 20
+//        ]
+//    }
+//    
+//    var showRDAValues: Bool {
+//        false
+//    }
+//    
+//    var showFooterText: Bool {
+//        false
+//    }
+//    
+//    var energyValue: FoodLabelValue {
+//        FoodLabelValue(amount: 235, unit: .kj)
+//    }
+//    
+//    var carbAmount: Double {
+//        45.5
+//    }
+//    
+//    var fatAmount: Double {
+//        8
+//    }
+//    
+//    var proteinAmount: Double {
+//        12
+//    }
+//}
+//
+//struct FoodLabel_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FoodLabelPreview()
+//    }
+//}

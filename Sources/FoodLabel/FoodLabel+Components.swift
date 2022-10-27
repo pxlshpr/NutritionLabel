@@ -18,7 +18,7 @@ extension FoodLabel {
             caloriesRow
             Spacer().frame(height: 10)
             rectangle(height: 8)
-            if dataSource.showRDAValues {
+            if showRDAValues {
                 Spacer().frame(height: 6)
             }
         }
@@ -78,7 +78,7 @@ extension FoodLabel {
                 .foregroundColor(.primary)
             Spacer()
 //            Text(dataSource.amountString(withDetails: true, parentMultiplier: 1))
-            Text(dataSource.amountPerString)
+            Text(amountPerString)
                 .fontWeight(.bold)
                 .font(.title3)
                 .multilineTextAlignment(.trailing)
@@ -97,7 +97,7 @@ extension FoodLabel {
             Spacer()
             labelCaloriesAmount
         }
-        .if(dataSource.allowTapToChangeEnergyUnit, transform: { view in
+        .if(allowTapToChangeEnergyUnit, transform: { view in
             view
                 .onTapGesture {
                     Haptics.feedback(style: .soft)
@@ -130,7 +130,7 @@ extension FoodLabel {
     
     @ViewBuilder
     var percentHeaderRow: some View {
-        if dataSource.showRDAValues {
+        if showRDAValues {
             Group {
                 HStack(alignment: .top, spacing: 0) {
                     Spacer()

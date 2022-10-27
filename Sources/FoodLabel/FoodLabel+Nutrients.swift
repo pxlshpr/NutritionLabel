@@ -4,7 +4,7 @@ import PrepDataTypes
 extension FoodLabel {
     
     var proteinRow: some View {
-        row(title: "Protein", value: dataSource.proteinAmount, rdaValue: MacroRDA.protein, unit: "g", bold: true)
+        row(title: "Protein", value: protein, rdaValue: MacroRDA.protein, unit: "g", bold: true)
     }
     
     @ViewBuilder
@@ -13,7 +13,7 @@ extension FoodLabel {
         let title = type == .transFat ? "Fat" : type.description
         let bold = type == .cholesterol || type == .sodium
         
-        if let value = dataSource.nutrientAmount(for: type) {
+        if let value = nutrientAmount(for: type) {
             row(title: title,
                 prefix: prefix,
                 value: value,
@@ -46,7 +46,7 @@ extension FoodLabel {
     
     var carbRows: some View {
         Group {
-            row(title: "Total Carbohydrate", value: dataSource.carbAmount, rdaValue: MacroRDA.carb, unit: "g", bold: true)
+            row(title: "Total Carbohydrate", value: carb, rdaValue: MacroRDA.carb, unit: "g", bold: true)
             nutrientRow(forType: .dietaryFiber, indentLevel: 1)
             nutrientRow(forType: .solubleFiber, indentLevel: 2)
             nutrientRow(forType: .insolubleFiber, indentLevel: 2)
