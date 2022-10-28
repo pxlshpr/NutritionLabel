@@ -13,12 +13,13 @@ extension FoodLabel {
         let title = type == .transFat ? "Fat" : type.description
         let bold = type == .cholesterol || type == .sodium
         
-        if let value = nutrientAmount(for: type) {
+        if let value = nutrientValue(for: type) {
             row(title: title,
                 prefix: prefix,
-                value: value,
+                value: value.amount,
                 rdaValue: type.dailyValue?.0,
-                unit: type.dailyValue?.1.shortDescription ?? "g",
+//                unit: type.dailyValue?.1.shortDescription ?? "g",
+                unit: value.unit?.description ?? "",
                 indentLevel: indentLevel,
                 bold: bold,
                 prefixedWithIncludes: prefixedWithIncludes

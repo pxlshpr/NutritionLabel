@@ -10,7 +10,7 @@ public struct FoodLabel: View {
     @Binding var carb: Double
     @Binding var fat: Double
     @Binding var protein: Double
-    @Binding var nutrients: [NutrientType:Double]
+    @Binding var nutrients: [NutrientType : FoodLabelValue]
     @Binding var amountPerString: String
     
     let showFooterText: Bool
@@ -27,7 +27,7 @@ public struct FoodLabel: View {
         carb: Binding<Double>,
         fat: Binding<Double>,
         protein: Binding<Double>,
-        nutrients: Binding<[NutrientType:Double]>,
+        nutrients: Binding<[NutrientType : FoodLabelValue]>,
         amountPerString: Binding<String>,
         
         showFooterText: Bool = false,
@@ -94,7 +94,7 @@ public struct FoodLabel: View {
         !nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
     }
 
-    func nutrientAmount(for type: NutrientType) -> Double? {
+    func nutrientValue(for type: NutrientType) -> FoodLabelValue? {
         nutrients[type]
     }
 }
