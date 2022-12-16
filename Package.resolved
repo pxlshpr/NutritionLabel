@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/FoodLabelScanner",
       "state" : {
-        "revision" : "8bbf8a10a888151409cf7a91d292c1788b0b624b",
-        "version" : "0.0.81"
+        "revision" : "8b6af10146252411113a069c6e8d5f4aa3531082",
+        "version" : "0.0.82"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/PrepDataTypes",
       "state" : {
-        "revision" : "ace91f1b06e7b788b213035125f07b03c3db59c5",
-        "version" : "0.0.108"
+        "revision" : "abb1de5d81830796602dc666c6209914ad63b73d",
+        "version" : "0.0.233"
       }
     },
     {
