@@ -173,6 +173,7 @@ extension FoodLabel {
                     .fontWeight(bold ? .black : .regular)
                     .font(.headline)
                     .foregroundColor(.primary)
+                    .fixedSize(horizontal: true, vertical: false)
             }
         }
         
