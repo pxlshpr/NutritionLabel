@@ -151,7 +151,7 @@ extension FoodLabel {
     
     var labelCaloriesAmountAnimated: some View {
         Color.clear
-            .animatedMealItemQuantity(
+            .animatedEnergyValue(
                 value: showingEnergyInCalories
                 ? energyValue.energyAmountInCalories
                 : energyValue.energyAmountInKilojoules,
@@ -231,7 +231,7 @@ extension Double {
 
 //MARK: - Animatable modifiers
 
-struct AnimatableMealItemQuantityModifier: AnimatableModifier {
+struct AnimatableEnergyValueModifier: AnimatableModifier {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -303,8 +303,8 @@ struct AnimatableMealItemQuantityModifier: AnimatableModifier {
 }
 
 public extension View {
-    func animatedMealItemQuantity(value: Double, unitString: String, isAnimating: Bool) -> some View {
-        modifier(AnimatableMealItemQuantityModifier(value: value, unitString: unitString, isAnimating: isAnimating))
+    func animatedEnergyValue(value: Double, unitString: String, isAnimating: Bool) -> some View {
+        modifier(AnimatableEnergyValueModifier(value: value, unitString: unitString, isAnimating: isAnimating))
     }
 }
 
