@@ -161,8 +161,8 @@ extension FoodLabel {
     }
 }
 
-//MARK: - Extensions
-public extension Font.Weight {
+//MARK: - Extensions (reused and to be moved)
+private extension Font.Weight {
     var uiFontWeight: UIFont.Weight {
         switch self {
         case .medium:
@@ -189,7 +189,7 @@ public extension Font.Weight {
     }
 }
 
-public extension Double {
+private extension Double {
     var formattedNutrient: String {
         let rounded: Double
         if self < 50 {
@@ -212,7 +212,7 @@ public extension Double {
 
 }
 
-extension Double {
+private extension Double {
     var formattedWithCommas: String {
         guard self >= 1000 else {
             return cleanAmount
