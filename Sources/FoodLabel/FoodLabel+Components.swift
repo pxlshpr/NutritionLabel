@@ -95,7 +95,8 @@ extension FoodLabel {
                 .foregroundColor(.primary)
                 .transition(.opacity)
             Spacer()
-            labelCaloriesAmount
+//            labelCaloriesAmount
+            labelCaloriesAmountAnimated
         }
         .if(allowTapToChangeEnergyUnit, transform: { view in
             view
@@ -146,5 +147,349 @@ extension FoodLabel {
                 Spacer().frame(height: 5)
             }
         }
+    }
+    
+    var labelCaloriesAmountAnimated: some View {
+        Color.clear
+            .animatedMealItemQuantity(
+                value: showingEnergyInCalories
+                ? energyValue.energyAmountInCalories
+                : energyValue.energyAmountInKilojoules,
+                unitString: showingEnergyInCalories ? "" : "kJ",
+                isAnimating: true
+            )
+    }
+}
+
+//MARK: - Extensions
+public extension Font.Weight {
+    var uiFontWeight: UIFont.Weight {
+        switch self {
+        case .medium:
+            return .medium
+        case .black:
+            return .black
+        case .bold:
+            return .bold
+        case .heavy:
+            return .heavy
+        case .light:
+            return .light
+        case .regular:
+            return .regular
+        case .semibold:
+            return .semibold
+        case .thin:
+            return .thin
+        case .ultraLight:
+            return .ultraLight
+        default:
+            return .regular
+        }
+    }
+}
+
+public extension Double {
+    var formattedNutrient: String {
+        let rounded: Double
+        if self < 50 {
+            rounded = self.rounded(toPlaces: 1)
+        } else {
+            rounded = self.rounded()
+        }
+        return rounded.formattedWithCommas
+    }
+    
+    var formattedMealItemAmount: String {
+        let rounded: Double
+//        if self < 50 {
+//            rounded = self.rounded(toPlaces: 1)
+//        } else {
+            rounded = self.rounded()
+//        }
+        return rounded.formattedWithCommas
+    }
+
+}
+
+extension Double {
+    var formattedWithCommas: String {
+        guard self >= 1000 else {
+            return cleanAmount
+        }
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        let number = NSNumber(value: Int(self))
+        
+        guard let formatted = numberFormatter.string(from: number) else {
+            return "\(Int(self))"
+        }
+        return formatted
+    }
+}
+
+//MARK: - Animatable modifiers
+
+struct AnimatableMealItemQuantityModifier: AnimatableModifier {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    var value: Double
+    var unitString: String
+    var isAnimating: Bool
+    
+    let fontSize: CGFloat = 34
+    let fontWeight: Font.Weight = .black
+    
+    var animatableData: Double {
+        get { value }
+        set { value = newValue }
+    }
+    
+    var uiFont: UIFont {
+        UIFont.systemFont(ofSize: fontSize, weight: fontWeight.uiFontWeight)
+    }
+    
+    var size: CGSize {
+        uiFont.fontSize(for: value.formattedNutrient)
+    }
+    
+    let unitFontSize: CGFloat = 20
+    let unitFontWeight: Font.Weight = .bold
+    
+    var unitUIFont: UIFont {
+        UIFont.systemFont(ofSize: unitFontSize, weight: unitFontWeight.uiFontWeight)
+    }
+    
+    var unitWidth: CGFloat {
+        unitUIFont.fontSize(for: unitString).width
+    }
+    
+    var amountString: String {
+        if isAnimating {
+            return value.formattedMealItemAmount
+        } else {
+            return value.cleanAmount
+        }
+    }
+    
+    func body(content: Content) -> some View {
+        content
+//            .frame(width: size.width, height: size.height)
+//            .frame(width: 200 + unitWidth, height: size.height)
+            .frame(maxWidth: .infinity)
+            .frame(height: size.height)
+            .overlay(
+                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                    Spacer()
+                    HStack(alignment: .top, spacing: 0) {
+                        Text(amountString)
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(.primary)
+                            .font(.system(size: fontSize, weight: fontWeight, design: .default))
+                        Text(unitString)
+                            .font(.system(
+                                size: unitFontSize,
+                                weight: unitFontWeight,
+                                design: .default)
+                            )
+                            .offset(y: 2)
+                            .foregroundColor(.primary)
+                    }
+                }
+            )
+    }
+}
+
+public extension View {
+    func animatedMealItemQuantity(value: Double, unitString: String, isAnimating: Bool) -> some View {
+        modifier(AnimatableMealItemQuantityModifier(value: value, unitString: unitString, isAnimating: isAnimating))
+    }
+}
+
+//MARK: - Animatable modifiers
+
+struct AnimatableValue: AnimatableModifier {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    var value: Double
+    var unitString: String
+    var isAnimating: Bool
+    var numberOfDecimalPlaces: Int
+    
+    let fontSize: CGFloat = 12
+    let fontWeight: Font.Weight = .regular
+    
+    var animatableData: Double {
+        get { value }
+        set { value = newValue }
+    }
+    
+    var uiFont: UIFont {
+        UIFont.systemFont(ofSize: fontSize, weight: fontWeight.uiFontWeight)
+    }
+    
+    var size: CGSize {
+        uiFont.fontSize(for: value.formattedNutrient)
+    }
+    
+    let unitFontSize: CGFloat = 17
+    let unitFontWeight: Font.Weight = .regular
+    
+    var unitUIFont: UIFont {
+        UIFont.systemFont(ofSize: unitFontSize, weight: unitFontWeight.uiFontWeight)
+    }
+    
+    var unitWidth: CGFloat {
+        unitUIFont.fontSize(for: unitString).width
+    }
+    
+    var amountString: String {
+        if isAnimating {
+            return value.formattedMealItemAmount
+        } else {
+            return value.cleanAmount
+        }
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity)
+            .frame(height: size.height)
+            .overlay(
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    if numberOfDecimalPlaces != 0 {
+                        if isAnimating {
+                            Text("\(value.rounded(toPlaces: 0).cleanAmount)")
+                        } else {
+                            Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
+                        }
+                    } else {
+                        if value < 0.5 {
+                            if value == 0 {
+                                Text("0")
+                            } else if value < 0.1 {
+                                Text("< 0.1")
+                            } else {
+                                Text("\(String(format: "%.1f", value))")
+                            }
+                        } else {
+                            Text("\(Int(value))")
+                        }
+                    }
+//                        .multilineTextAlignment(.leading)
+                    Text(unitString)
+                    .font(.system(
+                        size: unitFontSize,
+                        weight: unitFontWeight,
+                        design: .default)
+                    )
+                    .foregroundColor(.primary)
+                    Spacer()
+                }
+            )
+    }
+}
+
+public extension View {
+    func animatedValue(value: Double, unitString: String, isAnimating: Bool, numberOfDecimalPlaces: Int = 1) -> some View {
+        modifier(AnimatableValue(value: value, unitString: unitString, isAnimating: isAnimating, numberOfDecimalPlaces: numberOfDecimalPlaces))
+    }
+}
+
+struct AnimatableIncludedValue: AnimatableModifier {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    var value: Double
+    var unitString: String
+    var isAnimating: Bool
+    var numberOfDecimalPlaces: Int
+    var title: String
+    
+    let fontSize: CGFloat = 12
+    let fontWeight: Font.Weight = .regular
+    
+    var animatableData: Double {
+        get { value }
+        set { value = newValue }
+    }
+    
+    var uiFont: UIFont {
+        UIFont.systemFont(ofSize: fontSize, weight: fontWeight.uiFontWeight)
+    }
+    
+    var size: CGSize {
+        uiFont.fontSize(for: value.formattedNutrient)
+    }
+    
+    let unitFontSize: CGFloat = 17
+    let unitFontWeight: Font.Weight = .regular
+    
+    var unitUIFont: UIFont {
+        UIFont.systemFont(ofSize: unitFontSize, weight: unitFontWeight.uiFontWeight)
+    }
+    
+    var unitWidth: CGFloat {
+        unitUIFont.fontSize(for: unitString).width
+    }
+    
+    var amountString: String {
+        if isAnimating {
+            return value.formattedMealItemAmount
+        } else {
+            return value.cleanAmount
+        }
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity)
+            .frame(height: size.height + 6.0)
+            .overlay(
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Text("Includes  ")
+                        .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+                    if numberOfDecimalPlaces != 0 {
+                        if isAnimating {
+                            Text("\(value.rounded(toPlaces: 0).cleanAmount)")
+                        } else {
+                            Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
+                        }
+                    } else {
+                        if value < 0.5 {
+                            if value == 0 {
+                                Text("0")
+                            } else if value < 0.1 {
+                                Text("< 0.1")
+                            } else {
+                                Text("\(String(format: "%.1f", value))")
+                            }
+                        } else {
+                            Text("\(Int(value))")
+                        }
+                    }
+                    Text(unitString)
+                        .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+                    Text("  " + title)
+                        .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+                    Spacer()
+                }
+                .foregroundColor(.primary)
+            )
+    }
+}
+
+public extension View {
+    func animatedIncludedValue(value: Double, unitString: String, isAnimating: Bool, numberOfDecimalPlaces: Int = 1, title: String) -> some View {
+        modifier(AnimatableIncludedValue(
+            value: value,
+            unitString: unitString,
+            isAnimating: isAnimating,
+            numberOfDecimalPlaces: numberOfDecimalPlaces,
+            title: title
+        ))
     }
 }

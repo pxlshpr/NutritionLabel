@@ -139,7 +139,6 @@ extension FoodLabel {
     
     var fatRows: some View {
         Group {
-            
             row(title: "Total Fat",
                 value: fat,
                 rdaValue: MacroRDA.fat,
@@ -177,13 +176,28 @@ extension FoodLabel {
             }
         }
         
+//        let valueAndSuffix = Group {
+//            Text(valueString(for: value, with: unit))
+//                .fontWeight(.regular)
+//                .font(.headline)
+//                .foregroundColor(.primary)
+//        }
+
         let valueAndSuffix = Group {
-            Text(valueString(for: value, with: unit))
-                .fontWeight(.regular)
-                .font(.headline)
-                .foregroundColor(.primary)
+//            HStack {
+//                Text(valueString(for: value, with: unit))
+//                    .fontWeight(.regular)
+//                    .font(.headline)
+//                    .foregroundColor(.primary)
+                Color.clear
+                    .animatedValue(
+                        value: value,
+                        unitString: unit,
+                        isAnimating: true
+                    )
+//            }
         }
-        
+
         let divider = Group {
             HStack {
                 if indentLevel > 1 {
@@ -210,8 +224,15 @@ extension FoodLabel {
                 VStack {
                     HStack {
                         if prefixedWithIncludes {
-                            Text("Includes  \(valueString(for: value, with: unit))  \(title)")
-                                .foregroundColor(.primary)
+//                            Text("Includes  \(valueString(for: value, with: unit))  \(title)")
+//                                .foregroundColor(.primary)
+                            Color.clear
+                                .animatedIncludedValue(
+                                    value: value,
+                                    unitString: unit,
+                                    isAnimating: true,
+                                    title: title
+                                )
                         } else {
                             titleView
                             valueAndSuffix
