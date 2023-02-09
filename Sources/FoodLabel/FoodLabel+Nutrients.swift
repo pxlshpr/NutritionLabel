@@ -4,7 +4,13 @@ import PrepDataTypes
 extension FoodLabel {
     
     var proteinRow: some View {
-        row(title: "Protein", value: protein, rdaValue: MacroRDA.protein, unit: "g", bold: true)
+        row(
+            title: "Protein",
+            value: data.protein,
+            rdaValue: MacroRDA.protein,
+            unit: "g",
+            bold: true
+        )
     }
     
     @ViewBuilder
@@ -47,7 +53,13 @@ extension FoodLabel {
     
     var carbRows: some View {
         Group {
-            row(title: "Total Carbohydrate", value: carb, rdaValue: MacroRDA.carb, unit: "g", bold: true)
+            row(
+                title: "Total Carbohydrate",
+                value: data.carb,
+                rdaValue: MacroRDA.carb,
+                unit: "g",
+                bold: true
+            )
             nutrientRow(forType: .dietaryFiber, indentLevel: 1)
             nutrientRow(forType: .solubleFiber, indentLevel: 2)
             nutrientRow(forType: .insolubleFiber, indentLevel: 2)

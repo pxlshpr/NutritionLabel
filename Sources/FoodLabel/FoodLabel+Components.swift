@@ -77,13 +77,18 @@ extension FoodLabel {
                 .font(.title3)
                 .foregroundColor(.primary)
             Spacer()
-//            Text(dataSource.amountString(withDetails: true, parentMultiplier: 1))
-            Text(amountPerString)
-                .fontWeight(.bold)
-                .font(.title3)
-                .multilineTextAlignment(.trailing)
-                .foregroundColor(.primary)
-                .lineLimit(3)
+            Color.clear
+                .animatedQuantity(
+                    value: data.quantityValue,
+                    unitString: data.quantityUnit,
+                    isAnimating: true
+                )
+//            Text("\(data.quantityValue.cleanAmount) \(data.quantityUnit)")
+//                .fontWeight(.bold)
+//                .font(.title3)
+//                .multilineTextAlignment(.trailing)
+//                .foregroundColor(.primary)
+//                .lineLimit(3)
         }
     }
     
@@ -153,8 +158,8 @@ extension FoodLabel {
         Color.clear
             .animatedEnergyValue(
                 value: showingEnergyInCalories
-                ? energyValue.energyAmountInCalories
-                : energyValue.energyAmountInKilojoules,
+                ? data.energyValue.energyAmountInCalories
+                : data.energyValue.energyAmountInKilojoules,
                 unitString: showingEnergyInCalories ? "" : "kJ",
                 isAnimating: true
             )
@@ -231,6 +236,7 @@ private extension Double {
 
 //MARK: - Animatable modifiers
 
+//MARK: EnergyValue
 struct AnimatableEnergyValueModifier: AnimatableModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -302,14 +308,13 @@ struct AnimatableEnergyValueModifier: AnimatableModifier {
     }
 }
 
-public extension View {
+extension View {
     func animatedEnergyValue(value: Double, unitString: String, isAnimating: Bool) -> some View {
         modifier(AnimatableEnergyValueModifier(value: value, unitString: unitString, isAnimating: isAnimating))
     }
 }
 
-//MARK: - Animatable modifiers
-
+//MARK: Value
 struct AnimatableValue: AnimatableModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -393,12 +398,13 @@ struct AnimatableValue: AnimatableModifier {
     }
 }
 
-public extension View {
+extension View {
     func animatedValue(value: Double, unitString: String, isAnimating: Bool, numberOfDecimalPlaces: Int = 1) -> some View {
         modifier(AnimatableValue(value: value, unitString: unitString, isAnimating: isAnimating, numberOfDecimalPlaces: numberOfDecimalPlaces))
     }
 }
 
+//MARK: "Includes" Value
 struct AnimatableIncludedValue: AnimatableModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -482,7 +488,7 @@ struct AnimatableIncludedValue: AnimatableModifier {
     }
 }
 
-public extension View {
+extension View {
     func animatedIncludedValue(value: Double, unitString: String, isAnimating: Bool, numberOfDecimalPlaces: Int = 1, title: String) -> some View {
         modifier(AnimatableIncludedValue(
             value: value,
@@ -490,6 +496,90 @@ public extension View {
             isAnimating: isAnimating,
             numberOfDecimalPlaces: numberOfDecimalPlaces,
             title: title
+        ))
+    }
+}
+
+//MARK: Quantity
+
+struct AnimatableQuantityModifier: AnimatableModifier {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    var value: Double
+    var unitString: String
+    var isAnimating: Bool
+    
+    let fontSize: CGFloat = 20
+    let fontWeight: Font.Weight = .bold
+    
+    var animatableData: Double {
+        get { value }
+        set { value = newValue }
+    }
+    
+    var uiFont: UIFont {
+        UIFont.systemFont(ofSize: fontSize, weight: fontWeight.uiFontWeight)
+    }
+    
+    var size: CGSize {
+        uiFont.fontSize(for: value.formattedNutrient)
+    }
+    
+    let unitFontSize: CGFloat = 20
+    let unitFontWeight: Font.Weight = .bold
+    
+    var unitUIFont: UIFont {
+        UIFont.systemFont(ofSize: unitFontSize, weight: unitFontWeight.uiFontWeight)
+    }
+    
+    var unitWidth: CGFloat {
+        unitUIFont.fontSize(for: unitString).width
+    }
+    
+    var amountString: String {
+        if isAnimating {
+            return value.formattedMealItemAmount
+        } else {
+            return value.cleanAmount
+        }
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity)
+            .frame(height: size.height)
+            .overlay(
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Spacer()
+//                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    HStack(alignment: .center, spacing: 4) {
+                        Text(amountString)
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(.primary)
+                            .font(.system(size: fontSize, weight: fontWeight, design: .default))
+                        Text(unitString)
+                            .font(.system(
+                                size: unitFontSize,
+                                weight: unitFontWeight,
+                                design: .default)
+                            )
+                            .minimumScaleFactor(0.2)
+                            .lineLimit(3)
+//                            .fixedSize(horizontal: true, vertical: false)
+                            .foregroundColor(.primary)
+                    }
+                }
+            )
+    }
+}
+
+extension View {
+    func animatedQuantity(value: Double, unitString: String, isAnimating: Bool) -> some View {
+        modifier(AnimatableQuantityModifier(
+            value: value,
+            unitString: unitString,
+            isAnimating: isAnimating
         ))
     }
 }

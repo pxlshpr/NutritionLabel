@@ -3,15 +3,45 @@ import SwiftHaptics
 import PrepDataTypes
 import FoodLabelScanner
 
+public struct FoodLabelData {
+    let energyValue: FoodLabelValue
+    let carb: Double
+    let fat: Double
+    let protein: Double
+    let nutrients: [NutrientType : FoodLabelValue]
+    let quantityValue: Double
+    let quantityUnit: String
+    
+    public init(
+        energyValue: FoodLabelValue,
+        carb: Double,
+        fat: Double,
+        protein: Double,
+        nutrients: [NutrientType : FoodLabelValue],
+        quantityValue: Double,
+        quantityUnit: String
+    ) {
+        self.energyValue = energyValue
+        self.carb = carb
+        self.fat = fat
+        self.protein = protein
+        self.nutrients = nutrients
+        self.quantityValue = quantityValue
+        self.quantityUnit = quantityUnit
+    }
+}
+
 public struct FoodLabel: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+
+    @Binding var data: FoodLabelData
     
-    @Binding var energyValue: FoodLabelValue
-    @Binding var carb: Double
-    @Binding var fat: Double
-    @Binding var protein: Double
-    @Binding var nutrients: [NutrientType : FoodLabelValue]
-    @Binding var amountPerString: String
+//    @Binding var energyValue: FoodLabelValue
+//    @Binding var carb: Double
+//    @Binding var fat: Double
+//    @Binding var protein: Double
+//    @Binding var nutrients: [NutrientType : FoodLabelValue]
+//    @Binding var amountPerString: String
     
     let showFooterText: Bool
     let showRDAValues: Bool
@@ -23,31 +53,35 @@ public struct FoodLabel: View {
     @State var showingEnergyInCalories: Bool
     
     public init(
-        energyValue: Binding<FoodLabelValue>,
-        carb: Binding<Double>,
-        fat: Binding<Double>,
-        protein: Binding<Double>,
-        nutrients: Binding<[NutrientType : FoodLabelValue]>,
-        amountPerString: Binding<String>,
+        data: Binding<FoodLabelData>,
+        
+//        energyValue: Binding<FoodLabelValue>,
+//        carb: Binding<Double>,
+//        fat: Binding<Double>,
+//        protein: Binding<Double>,
+//        nutrients: Binding<[NutrientType : FoodLabelValue]>,
+//        amountPerString: Binding<String>,
         
         showFooterText: Bool = false,
         showRDAValues: Bool = false,
         allowTapToChangeEnergyUnit: Bool = false,
         numberOfDecimalPlaces: Int = 1
     ) {
-        _energyValue = energyValue
-        _carb = carb
-        _fat = fat
-        _protein = protein
-        _nutrients = nutrients
-        _amountPerString = amountPerString
+        _data = data
+//        _energyValue = energyValue
+//        _carb = carb
+//        _fat = fat
+//        _protein = protein
+//        _nutrients = nutrients
+//        _amountPerString = amountPerString
         
         self.showFooterText = showFooterText
         self.showRDAValues = showRDAValues
         self.allowTapToChangeEnergyUnit = allowTapToChangeEnergyUnit
         self.numberOfDecimalPlaces = numberOfDecimalPlaces
         
-        let isKcal = energyValue.wrappedValue.unit != FoodLabelUnit.kj
+        let isKcal = data.wrappedValue.energyValue.unit != FoodLabelUnit.kj
+//        let isKcal = energyValue.wrappedValue.unit != FoodLabelUnit.kj
         _showingEnergyInCalories = State(initialValue: isKcal)
     }
     
@@ -74,7 +108,7 @@ public struct FoodLabel: View {
         }
         .padding(15)
         .border(borderColor, width: 5.0)
-        .onChange(of: energyValue) { newValue in
+        .onChange(of: data.energyValue) { newValue in
             
             let shouldToggle: Bool
             if newValue.unit == .kj {
@@ -91,11 +125,11 @@ public struct FoodLabel: View {
     }
     
     var shouldShowMicronutrients: Bool {
-        !nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
+        !data.nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
     }
 
     func nutrientValue(for type: NutrientType) -> FoodLabelValue? {
-        nutrients[type]
+        data.nutrients[type]
     }
 }
 
@@ -140,7 +174,7 @@ extension FoodLabel {
     var fatRows: some View {
         Group {
             row(title: "Total Fat",
-                value: fat,
+                value: data.fat,
                 rdaValue: MacroRDA.fat,
                 unit: "g",
                 bold: true,

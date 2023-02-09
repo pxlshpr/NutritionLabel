@@ -8,7 +8,9 @@ extension FoodLabel {
     }
     
     var formattedEnergy: String {
-        let amount = showingEnergyInCalories ? energyValue.energyAmountInCalories : energyValue.energyAmountInKilojoules
+        let amount = showingEnergyInCalories
+        ? data.energyValue.energyAmountInCalories
+        : data.energyValue.energyAmountInKilojoules
         return "\(Int(amount))"
     }
 
