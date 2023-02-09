@@ -488,6 +488,7 @@ struct AnimatableIncludedValue: AnimatableModifier {
         }
         return HStack(alignment: .firstTextBaseline, spacing: 4) {
             Text("Includes \(valueString)\(unitString) \(title)")
+                .multilineTextAlignment(.leading)
                 .lineLimit(3)
                 .fixedSize(horizontal: false, vertical: true)
                 .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
