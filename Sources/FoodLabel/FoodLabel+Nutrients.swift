@@ -1,6 +1,17 @@
 import SwiftUI
 import PrepDataTypes
 
+extension NutrientType {
+    var foodLabelDescription: String {
+        if let letter = vitaminLetterName {
+            return "Vitamin \(letter)"
+        } else if self == .transFat {
+            return "Fat" /// We'll be prefixing `Trans` in a separate text
+        } else {
+            return description
+        }
+    }
+}
 extension FoodLabel {
     
     var proteinRow: some View {
@@ -16,7 +27,7 @@ extension FoodLabel {
     @ViewBuilder
     func nutrientRow(forType type: NutrientType, indentLevel: Int = 0, prefixedWithIncludes: Bool = false) -> some View {
         let prefix = type == .transFat ? "Trans" : nil
-        let title = type == .transFat ? "Fat" : type.description
+        let title = type.foodLabelDescription
         let bold = type == .cholesterol || type == .sodium
         
         if let value = nutrientValue(for: type) {
