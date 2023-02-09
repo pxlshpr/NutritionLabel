@@ -487,7 +487,7 @@ struct AnimatableIncludedValue: AnimatableModifier {
             }
         }
         return HStack(alignment: .firstTextBaseline, spacing: 4) {
-            Text("Includes \(valueString)\(unitString) \(title)")
+            Text("Includes  \(valueString)\(unitString) \(title)")
                 .multilineTextAlignment(.leading)
                 .lineLimit(3)
                 .fixedSize(horizontal: false, vertical: true)
@@ -596,7 +596,6 @@ struct AnimatableQuantityModifier: AnimatableModifier {
             .overlay(
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
                     Spacer()
-//                    HStack(alignment: .firstTextBaseline, spacing: 4) {
                     HStack(alignment: .center, spacing: 4) {
                         Text(amountString)
                             .multilineTextAlignment(.leading)
@@ -609,7 +608,6 @@ struct AnimatableQuantityModifier: AnimatableModifier {
                             )
                             .minimumScaleFactor(0.2)
                             .lineLimit(3)
-//                            .fixedSize(horizontal: true, vertical: false)
                     }
                     .foregroundColor(.primary)
                 }
@@ -626,3 +624,186 @@ extension View {
         ))
     }
 }
+
+//MARK: Value
+struct AnimatableValueWithLabel: AnimatableModifier {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    var title: String
+    var boldTitle: Bool
+    var prefix: String?
+    var value: Double
+    var unitString: String
+    var isAnimating: Bool
+    var numberOfDecimalPlaces: Int
+    
+    let fontSize: CGFloat = 12
+    let fontWeight: Font.Weight = .regular
+    
+    var animatableData: Double {
+        get { value }
+        set { value = newValue }
+    }
+    
+    var uiFont: UIFont {
+        UIFont.systemFont(ofSize: fontSize, weight: fontWeight.uiFontWeight)
+    }
+    
+    var size: CGSize {
+        uiFont.fontSize(for: value.formattedNutrient)
+    }
+    
+    let unitFontSize: CGFloat = 17
+    let unitFontWeight: Font.Weight = .regular
+    
+    var unitUIFont: UIFont {
+        UIFont.systemFont(ofSize: unitFontSize, weight: unitFontWeight.uiFontWeight)
+    }
+    
+    var unitWidth: CGFloat {
+        unitUIFont.fontSize(for: unitString).width
+    }
+    
+    var amountString: String {
+        if isAnimating {
+            return value.formattedMealItemAmount
+        } else {
+            return value.cleanAmount
+        }
+    }
+    
+    @State var height: CGFloat = 0
+    
+
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity)
+//            .frame(height: size.height)
+//            .overlay(
+//                HStack(alignment: .firstTextBaseline, spacing: 0) {
+//                    if numberOfDecimalPlaces != 0 {
+//                        if isAnimating {
+//                            Text("\(value.rounded(toPlaces: 0).cleanAmount)")
+//                        } else {
+//                            Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
+//                        }
+//                    } else {
+//                        if value < 0.5 {
+//                            if value == 0 {
+//                                Text("0")
+//                            } else if value < 0.1 {
+//                                Text("< 0.1")
+//                            } else {
+//                                Text("\(String(format: "%.1f", value))")
+//                            }
+//                        } else {
+//                            Text("\(Int(value))")
+//                        }
+//                    }
+////                        .multilineTextAlignment(.leading)
+//                    Text(unitString)
+//                    .font(.system(
+//                        size: unitFontSize,
+//                        weight: unitFontWeight,
+//                        design: .default)
+//                    )
+//                    Spacer()
+//                }
+//                .foregroundColor(.primary)
+//            )
+            .frame(height: height)
+            .overlay(
+                animatedLabel
+                    .readSize { size in
+                        print("height is: \(size.height)")
+                        self.height = size.height
+                    }
+            )
+
+    }
+    
+    
+    var animatedLabel: some View {
+        
+        var valueString: String {
+            if numberOfDecimalPlaces != 0 {
+                if isAnimating {
+                    return value.rounded(toPlaces: 0).cleanAmount
+                } else {
+                    return value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount
+                }
+            } else {
+                if value < 0.5 {
+                    if value == 0 {
+                        return "0"
+                    } else if value < 0.1 {
+                        return "< 0.1"
+                    } else {
+                        return "\(String(format: "%.1f", value))"
+                    }
+                } else {
+                    return "\(Int(value))"
+                }
+            }
+        }
+        
+        func prefixText(_ string: String) -> Text {
+            Text(string)
+                .fontWeight(.regular)
+                .font(.headline)
+                .italic()
+        }
+        
+        var titleText: Text {
+            Text(title)
+                .fontWeight(boldTitle ? .black : .regular)
+                .font(.headline)
+        }
+        
+        var baseText: Text {
+            Text("\(titleText)  \(valueString)\(unitString)")
+        }
+        
+        var text: Text {
+            if let prefix {
+                return Text("\(prefixText(prefix)) \(baseText)")
+            } else {
+                return baseText
+            }
+        }
+        
+        return HStack(alignment: .firstTextBaseline, spacing: 4) {
+            text
+                .multilineTextAlignment(.leading)
+                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+            Spacer()
+        }
+        .foregroundColor(.primary)
+    }
+}
+
+extension View {
+    func animatedValueWithLabel(
+        title: String,
+        boldTitle: Bool = false,
+        prefix: String? = nil,
+        value: Double,
+        unitString: String,
+        isAnimating: Bool,
+        numberOfDecimalPlaces: Int = 1
+    ) -> some View {
+        modifier(AnimatableValueWithLabel(
+            title: title,
+            boldTitle: boldTitle,
+            prefix: prefix,
+            value: value,
+            unitString: unitString,
+            isAnimating: isAnimating,
+            numberOfDecimalPlaces: numberOfDecimalPlaces
+        ))
+    }
+}
+

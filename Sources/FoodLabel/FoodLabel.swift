@@ -211,26 +211,13 @@ extension FoodLabel {
             }
         }
         
-//        let valueAndSuffix = Group {
-//            Text(valueString(for: value, with: unit))
-//                .fontWeight(.regular)
-//                .font(.headline)
-//                .foregroundColor(.primary)
-//        }
-
         let valueAndSuffix = Group {
-//            HStack {
-//                Text(valueString(for: value, with: unit))
-//                    .fontWeight(.regular)
-//                    .font(.headline)
-//                    .foregroundColor(.primary)
-                Color.clear
-                    .animatedValue(
-                        value: value,
-                        unitString: unit,
-                        isAnimating: true
-                    )
-//            }
+            Color.clear
+                .animatedValue(
+                    value: value,
+                    unitString: unit,
+                    isAnimating: true
+                )
         }
 
         let divider = Group {
@@ -246,6 +233,29 @@ extension FoodLabel {
             .frame(height: 6.0)
         }
         
+        var animatedIncludedValue: some View {
+            Color.clear
+                .animatedIncludedValue(
+                    value: value,
+                    unitString: unit,
+                    isAnimating: true,
+                    title: title
+                )
+        }
+        
+        var animatedValueWithLabel: some View {
+            Color.clear
+                .animatedValueWithLabel(
+                    title: title,
+                    boldTitle: bold,
+                    prefix: prefix,
+                    value: value,
+                    unitString: unit,
+                    isAnimating: true,
+                    numberOfDecimalPlaces: numberOfDecimalPlaces
+                )
+        }
+        
         return VStack(spacing: 0) {
             if includeDivider {
                 divider
@@ -259,18 +269,11 @@ extension FoodLabel {
                 VStack {
                     HStack {
                         if prefixedWithIncludes {
-//                            Text("Includes  \(valueString(for: value, with: unit))  \(title)")
-//                                .foregroundColor(.primary)
-                            Color.clear
-                                .animatedIncludedValue(
-                                    value: value,
-                                    unitString: unit,
-                                    isAnimating: true,
-                                    title: title
-                                )
+                            animatedIncludedValue
                         } else {
-                            titleView
-                            valueAndSuffix
+                            animatedValueWithLabel
+//                            titleView
+//                            valueAndSuffix
                         }
                         Spacer()
                         if rdaValue != nil, showRDAValues {
