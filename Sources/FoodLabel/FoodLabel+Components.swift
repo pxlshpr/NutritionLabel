@@ -439,6 +439,8 @@ struct AnimatableIncludedValue: AnimatableModifier {
         unitUIFont.fontSize(for: unitString).width
     }
     
+    @State var height: CGFloat = 0
+    
     var amountString: String {
         if isAnimating {
             return value.formattedMealItemAmount
@@ -450,40 +452,82 @@ struct AnimatableIncludedValue: AnimatableModifier {
     func body(content: Content) -> some View {
         content
             .frame(maxWidth: .infinity)
-            .frame(height: size.height + 6.0)
+//            .frame(height: size.height + 6.0)
+            .frame(height: height)
             .overlay(
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text("Includes")
-                        .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
-                    HStack(alignment: .firstTextBaseline, spacing: 0) {
-                        if numberOfDecimalPlaces != 0 {
-                            if isAnimating {
-                                Text("\(value.rounded(toPlaces: 0).cleanAmount)")
-                            } else {
-                                Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
-                            }
-                        } else {
-                            if value < 0.5 {
-                                if value == 0 {
-                                    Text("0")
-                                } else if value < 0.1 {
-                                    Text("< 0.1")
-                                } else {
-                                    Text("\(String(format: "%.1f", value))")
-                                }
-                            } else {
-                                Text("\(Int(value))")
-                            }
-                        }
-                        Text(unitString)
-                            .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+                animatedLabel
+                    .readSize { size in
+                        print("height is: \(size.height)")
+                        self.height = size.height
                     }
-                    Text(title)
-                        .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
-                    Spacer()
-                }
-                .foregroundColor(.primary)
             )
+    }
+    
+    var animatedLabel: some View {
+        
+        var valueString: String {
+            if numberOfDecimalPlaces != 0 {
+                if isAnimating {
+                    return value.rounded(toPlaces: 0).cleanAmount
+                } else {
+                    return value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount
+                }
+            } else {
+                if value < 0.5 {
+                    if value == 0 {
+                        return "0"
+                    } else if value < 0.1 {
+                        return "< 0.1"
+                    } else {
+                        return "\(String(format: "%.1f", value))"
+                    }
+                } else {
+                    return "\(Int(value))"
+                }
+            }
+        }
+        return HStack(alignment: .firstTextBaseline, spacing: 4) {
+            Text("Includes \(valueString)\(unitString) \(title)")
+                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+            Spacer()
+        }
+        .foregroundColor(.primary)
+    }
+    
+    var animatedLabel_legacy: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 4) {
+            Text("Includes")
+                .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+            HStack(alignment: .firstTextBaseline, spacing: 0) {
+                if numberOfDecimalPlaces != 0 {
+                    if isAnimating {
+                        Text("\(value.rounded(toPlaces: 0).cleanAmount)")
+                    } else {
+                        Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
+                    }
+                } else {
+                    if value < 0.5 {
+                        if value == 0 {
+                            Text("0")
+                        } else if value < 0.1 {
+                            Text("< 0.1")
+                        } else {
+                            Text("\(String(format: "%.1f", value))")
+                        }
+                    } else {
+                        Text("\(Int(value))")
+                    }
+                }
+                Text(unitString)
+                    .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+            }
+            Text(title)
+                .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
+            Spacer()
+        }
+        .foregroundColor(.primary)
     }
 }
 
