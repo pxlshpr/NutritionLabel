@@ -457,7 +457,6 @@ struct AnimatableIncludedValue: AnimatableModifier {
             .overlay(
                 animatedLabel
                     .readSize { size in
-                        print("height is: \(size.height)")
                         self.height = size.height
                     }
             )
@@ -716,7 +715,6 @@ struct AnimatableValueWithLabel: AnimatableModifier {
             .overlay(
                 animatedLabel
                     .readSize { size in
-                        print("height is: \(size.height)")
                         self.height = size.height
                     }
             )
