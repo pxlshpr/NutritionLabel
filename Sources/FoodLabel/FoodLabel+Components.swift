@@ -453,7 +453,7 @@ struct AnimatableIncludedValue: AnimatableModifier {
             .frame(height: size.height + 6.0)
             .overlay(
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
-                    Text("Includes  ")
+                    Text("Includes ")
                         .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
                     if numberOfDecimalPlaces != 0 {
                         if isAnimating {
@@ -476,7 +476,7 @@ struct AnimatableIncludedValue: AnimatableModifier {
                     }
                     Text(unitString)
                         .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
-                    Text("  " + title)
+                    Text(" " + title)
                         .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
                     Spacer()
                 }
