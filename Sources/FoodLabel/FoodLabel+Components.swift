@@ -452,31 +452,33 @@ struct AnimatableIncludedValue: AnimatableModifier {
             .frame(maxWidth: .infinity)
             .frame(height: size.height + 6.0)
             .overlay(
-                HStack(alignment: .firstTextBaseline, spacing: 0) {
-                    Text("Includes ")
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text("Includes")
                         .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
-                    if numberOfDecimalPlaces != 0 {
-                        if isAnimating {
-                            Text("\(value.rounded(toPlaces: 0).cleanAmount)")
-                        } else {
-                            Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
-                        }
-                    } else {
-                        if value < 0.5 {
-                            if value == 0 {
-                                Text("0")
-                            } else if value < 0.1 {
-                                Text("< 0.1")
+                    HStack(alignment: .firstTextBaseline, spacing: 0) {
+                        if numberOfDecimalPlaces != 0 {
+                            if isAnimating {
+                                Text("\(value.rounded(toPlaces: 0).cleanAmount)")
                             } else {
-                                Text("\(String(format: "%.1f", value))")
+                                Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
                             }
                         } else {
-                            Text("\(Int(value))")
+                            if value < 0.5 {
+                                if value == 0 {
+                                    Text("0")
+                                } else if value < 0.1 {
+                                    Text("< 0.1")
+                                } else {
+                                    Text("\(String(format: "%.1f", value))")
+                                }
+                            } else {
+                                Text("\(Int(value))")
+                            }
                         }
+                        Text(unitString)
+                            .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
                     }
-                    Text(unitString)
-                        .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
-                    Text(" " + title)
+                    Text(title)
                         .font(.system(size: unitFontSize, weight: unitFontWeight, design: .default))
                     Spacer()
                 }
