@@ -47,18 +47,19 @@ public struct FoodLabel: View {
 //    @Binding var nutrients: [NutrientType : FoodLabelValue]
 //    @Binding var amountPerString: String
     
-    let showFooterText: Bool
+//    let showFooterText: Bool
 //    let showRDAValues: Bool
     let allowTapToChangeEnergyUnit: Bool
     let numberOfDecimalPlaces: Int
     
     let shouldShowCustomMicronutrients: Bool = false
     
+    let didTapFooter: (() -> ())?
     @State var showingEnergyInCalories: Bool
     
     public init(
         data: Binding<FoodLabelData>,
-        
+        didTapFooter: (() -> ())? = nil,
 //        energyValue: Binding<FoodLabelValue>,
 //        carb: Binding<Double>,
 //        fat: Binding<Double>,
@@ -66,8 +67,8 @@ public struct FoodLabel: View {
 //        nutrients: Binding<[NutrientType : FoodLabelValue]>,
 //        amountPerString: Binding<String>,
         
-        showFooterText: Bool = false,
-        showRDAValues: Bool = true,
+//        showFooterText: Bool = false,
+//        showRDAValues: Bool = true,
         allowTapToChangeEnergyUnit: Bool = false,
         numberOfDecimalPlaces: Int = 1
     ) {
@@ -79,7 +80,8 @@ public struct FoodLabel: View {
 //        _nutrients = nutrients
 //        _amountPerString = amountPerString
         
-        self.showFooterText = showFooterText
+        self.didTapFooter = didTapFooter
+//        self.showFooterText = showFooterText
 //        self.showRDAValues = showRDAValues
         self.allowTapToChangeEnergyUnit = allowTapToChangeEnergyUnit
         self.numberOfDecimalPlaces = numberOfDecimalPlaces
@@ -106,7 +108,7 @@ public struct FoodLabel: View {
                 microsCustomSeparator
                 customMicros
             }
-            if showFooterText {
+            if data.showRDA {
                 footer
             }
         }

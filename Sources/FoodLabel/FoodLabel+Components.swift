@@ -51,12 +51,17 @@ extension FoodLabel {
             Spacer().frame(height: 3)
             rectangle(height: 8)
             Spacer().frame(height: 12)
-            HStack(alignment: .top, spacing: 0) {
-                Text("*")
-                Text("The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.")
+            Button {
+                didTapFooter?()
+            } label: {
+                HStack(alignment: .top, spacing: 0) {
+                    Text("*")
+                    Text("The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. \(Text("You can customize these.").foregroundColor(.accentColor))")
+                        .multilineTextAlignment(.leading)
+                }
+                .foregroundColor(.primary)
+                .font(.footnote)
             }
-            .foregroundColor(.primary)
-            .font(.footnote)
             Spacer().frame(height: 9)
         }
     }
