@@ -12,6 +12,8 @@ public struct FoodLabelData {
     let quantityValue: Double
     let quantityUnit: String
     
+    let showRDA: Bool
+    
     public init(
         energyValue: FoodLabelValue,
         carb: Double,
@@ -19,7 +21,8 @@ public struct FoodLabelData {
         protein: Double,
         nutrients: [NutrientType : FoodLabelValue],
         quantityValue: Double,
-        quantityUnit: String
+        quantityUnit: String,
+        showRDA: Bool = false
     ) {
         self.energyValue = energyValue
         self.carb = carb
@@ -28,6 +31,7 @@ public struct FoodLabelData {
         self.nutrients = nutrients
         self.quantityValue = quantityValue
         self.quantityUnit = quantityUnit
+        self.showRDA = showRDA
     }
 }
 
@@ -44,7 +48,7 @@ public struct FoodLabel: View {
 //    @Binding var amountPerString: String
     
     let showFooterText: Bool
-    let showRDAValues: Bool
+//    let showRDAValues: Bool
     let allowTapToChangeEnergyUnit: Bool
     let numberOfDecimalPlaces: Int
     
@@ -63,7 +67,7 @@ public struct FoodLabel: View {
 //        amountPerString: Binding<String>,
         
         showFooterText: Bool = false,
-        showRDAValues: Bool = false,
+        showRDAValues: Bool = true,
         allowTapToChangeEnergyUnit: Bool = false,
         numberOfDecimalPlaces: Int = 1
     ) {
@@ -76,7 +80,7 @@ public struct FoodLabel: View {
 //        _amountPerString = amountPerString
         
         self.showFooterText = showFooterText
-        self.showRDAValues = showRDAValues
+//        self.showRDAValues = showRDAValues
         self.allowTapToChangeEnergyUnit = allowTapToChangeEnergyUnit
         self.numberOfDecimalPlaces = numberOfDecimalPlaces
         
@@ -90,7 +94,7 @@ public struct FoodLabel: View {
         VStack(alignment: .leading, spacing: 0) {
             header
             calories
-            if showRDAValues {
+            if data.showRDA {
                 Spacer().frame(height: 3)
             }
             macros
@@ -179,7 +183,7 @@ extension FoodLabel {
                 unit: "g",
                 bold: true,
                 /// Don't include a divider above Fat if we're not showing RDA values as there won't be a % Daily VAlue header to have in it
-                includeDivider: showRDAValues
+                includeDivider: data.showRDA
             )
             nutrientRow(forType: .saturatedFat, indentLevel: 1)
             nutrientRow(forType: .polyunsaturatedFat, indentLevel: 1)
@@ -211,14 +215,14 @@ extension FoodLabel {
             }
         }
         
-        let valueAndSuffix = Group {
-            Color.clear
-                .animatedValue(
-                    value: value,
-                    unitString: unit,
-                    isAnimating: true
-                )
-        }
+//        let valueAndSuffix = Group {
+//            Color.clear
+//                .animatedValue(
+//                    value: value,
+//                    unitString: unit,
+//                    isAnimating: true
+//                )
+//        }
 
         let divider = Group {
             HStack {
@@ -276,11 +280,16 @@ extension FoodLabel {
 //                            valueAndSuffix
                         }
                         Spacer()
-                        if rdaValue != nil, showRDAValues {
-                            Text("\(Int((value/rdaValue!)*100.0))%")
-                                .fontWeight(.bold)
-                                .font(.headline)
-                                .foregroundColor(.primary)
+                        if let rdaValue, data.showRDA {
+                            Color.clear
+                                .animatedRDAValue(
+                                    value: (value/rdaValue) * 100.0,
+                                    isAnimating: true
+                                )
+//                            Text("\(Int((value/rdaValue)*100.0))%")
+//                                .fontWeight(.bold)
+//                                .font(.headline)
+//                                .foregroundColor(.primary)
                         }
                     }
                 }

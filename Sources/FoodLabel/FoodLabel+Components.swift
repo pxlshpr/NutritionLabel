@@ -18,7 +18,7 @@ extension FoodLabel {
             caloriesRow
             Spacer().frame(height: 10)
             rectangle(height: 8)
-            if showRDAValues {
+            if data.showRDA {
                 Spacer().frame(height: 6)
             }
         }
@@ -136,7 +136,7 @@ extension FoodLabel {
     
     @ViewBuilder
     var percentHeaderRow: some View {
-        if showRDAValues {
+        if data.showRDA {
             Group {
                 HStack(alignment: .top, spacing: 0) {
                     Spacer()
@@ -308,96 +308,6 @@ struct AnimatableEnergyValueModifier: AnimatableModifier {
 extension View {
     func animatedEnergyValue(value: Double, unitString: String, isAnimating: Bool) -> some View {
         modifier(AnimatableEnergyValueModifier(value: value, unitString: unitString, isAnimating: isAnimating))
-    }
-}
-
-//MARK: Value
-struct AnimatableValue: AnimatableModifier {
-    
-    @Environment(\.colorScheme) var colorScheme
-    
-    var value: Double
-    var unitString: String
-    var isAnimating: Bool
-    var numberOfDecimalPlaces: Int
-    
-    let fontSize: CGFloat = 12
-    let fontWeight: Font.Weight = .regular
-    
-    var animatableData: Double {
-        get { value }
-        set { value = newValue }
-    }
-    
-    var uiFont: UIFont {
-        UIFont.systemFont(ofSize: fontSize, weight: fontWeight.uiFontWeight)
-    }
-    
-    var size: CGSize {
-        uiFont.fontSize(for: value.formattedNutrient)
-    }
-    
-    let unitFontSize: CGFloat = 17
-    let unitFontWeight: Font.Weight = .regular
-    
-    var unitUIFont: UIFont {
-        UIFont.systemFont(ofSize: unitFontSize, weight: unitFontWeight.uiFontWeight)
-    }
-    
-    var unitWidth: CGFloat {
-        unitUIFont.fontSize(for: unitString).width
-    }
-    
-    var amountString: String {
-        if isAnimating {
-            return value.formattedMealItemAmount
-        } else {
-            return value.cleanAmount
-        }
-    }
-    
-    func body(content: Content) -> some View {
-        content
-            .frame(maxWidth: .infinity)
-            .frame(height: size.height)
-            .overlay(
-                HStack(alignment: .firstTextBaseline, spacing: 0) {
-                    if numberOfDecimalPlaces != 0 {
-                        if isAnimating {
-                            Text("\(value.rounded(toPlaces: 0).cleanAmount)")
-                        } else {
-                            Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
-                        }
-                    } else {
-                        if value < 0.5 {
-                            if value == 0 {
-                                Text("0")
-                            } else if value < 0.1 {
-                                Text("< 0.1")
-                            } else {
-                                Text("\(String(format: "%.1f", value))")
-                            }
-                        } else {
-                            Text("\(Int(value))")
-                        }
-                    }
-//                        .multilineTextAlignment(.leading)
-                    Text(unitString)
-                    .font(.system(
-                        size: unitFontSize,
-                        weight: unitFontWeight,
-                        design: .default)
-                    )
-                    Spacer()
-                }
-                .foregroundColor(.primary)
-            )
-    }
-}
-
-extension View {
-    func animatedValue(value: Double, unitString: String, isAnimating: Bool, numberOfDecimalPlaces: Int = 1) -> some View {
-        modifier(AnimatableValue(value: value, unitString: unitString, isAnimating: isAnimating, numberOfDecimalPlaces: numberOfDecimalPlaces))
     }
 }
 
@@ -624,7 +534,7 @@ extension View {
     }
 }
 
-//MARK: Value
+//MARK: Value with Label
 struct AnimatableValueWithLabel: AnimatableModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -678,39 +588,6 @@ struct AnimatableValueWithLabel: AnimatableModifier {
     func body(content: Content) -> some View {
         content
             .frame(maxWidth: .infinity)
-//            .frame(height: size.height)
-//            .overlay(
-//                HStack(alignment: .firstTextBaseline, spacing: 0) {
-//                    if numberOfDecimalPlaces != 0 {
-//                        if isAnimating {
-//                            Text("\(value.rounded(toPlaces: 0).cleanAmount)")
-//                        } else {
-//                            Text("\(value.rounded(toPlaces: numberOfDecimalPlaces).cleanAmount)")
-//                        }
-//                    } else {
-//                        if value < 0.5 {
-//                            if value == 0 {
-//                                Text("0")
-//                            } else if value < 0.1 {
-//                                Text("< 0.1")
-//                            } else {
-//                                Text("\(String(format: "%.1f", value))")
-//                            }
-//                        } else {
-//                            Text("\(Int(value))")
-//                        }
-//                    }
-////                        .multilineTextAlignment(.leading)
-//                    Text(unitString)
-//                    .font(.system(
-//                        size: unitFontSize,
-//                        weight: unitFontWeight,
-//                        design: .default)
-//                    )
-//                    Spacer()
-//                }
-//                .foregroundColor(.primary)
-//            )
             .frame(height: height)
             .overlay(
                 animatedLabel
@@ -718,7 +595,6 @@ struct AnimatableValueWithLabel: AnimatableModifier {
                         self.height = size.height
                     }
             )
-
     }
     
     
@@ -805,3 +681,55 @@ extension View {
     }
 }
 
+struct AnimatableRDAValue: AnimatableModifier {
+    
+    @Environment(\.colorScheme) var colorScheme
+    @State var size: CGSize = .zero
+    
+    var value: Double
+    var isAnimating: Bool
+    
+    var animatableData: Double {
+        get { value }
+        set { value = newValue }
+    }
+    
+    func body(content: Content) -> some View {
+        content
+//            .frame(maxWidth: .infinity)
+//            .frame(width: size.width, alignment: .trailing)
+            .frame(width: size.width, height: size.height)
+            .overlay(
+                animatedLabel
+                    .readSize { size in
+                        print("Size: \(size)")
+                        self.size = size
+                    }
+//                    .background(.blue)
+            )
+//            .background(.green)
+    }
+    
+    var animatedLabel: some View {
+        Text("\(Int(value))%")
+            .frame(maxWidth: .infinity)
+            .fontWeight(.bold)
+            .font(.headline)
+            .multilineTextAlignment(.trailing)
+//            .lineLimit(3)
+            .fixedSize(horizontal: true, vertical: false)
+            .foregroundColor(.primary)
+    }
+}
+
+extension View {
+    func animatedRDAValue(
+        value: Double,
+        isAnimating: Bool
+    ) -> some View {
+        modifier(AnimatableRDAValue(
+            value: value,
+            isAnimating: isAnimating
+        ))
+    }
+}
