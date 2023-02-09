@@ -14,6 +14,8 @@ public struct FoodLabelData {
     
     let showRDA: Bool
     
+    let customRDAValues: [AnyNutrient: (Double, NutrientUnit)]
+
     public init(
         energyValue: FoodLabelValue,
         carb: Double,
@@ -22,7 +24,8 @@ public struct FoodLabelData {
         nutrients: [NutrientType : FoodLabelValue],
         quantityValue: Double,
         quantityUnit: String,
-        showRDA: Bool = false
+        showRDA: Bool = false,
+        customRDAValues: [AnyNutrient: (Double, NutrientUnit)] = [:]
     ) {
         self.energyValue = energyValue
         self.carb = carb
@@ -32,6 +35,7 @@ public struct FoodLabelData {
         self.quantityValue = quantityValue
         self.quantityUnit = quantityUnit
         self.showRDA = showRDA
+        self.customRDAValues = customRDAValues
     }
 }
 
@@ -39,16 +43,6 @@ public struct FoodLabel: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     @Binding var data: FoodLabelData
-    
-//    @Binding var energyValue: FoodLabelValue
-//    @Binding var carb: Double
-//    @Binding var fat: Double
-//    @Binding var protein: Double
-//    @Binding var nutrients: [NutrientType : FoodLabelValue]
-//    @Binding var amountPerString: String
-    
-//    let showFooterText: Bool
-//    let showRDAValues: Bool
     let allowTapToChangeEnergyUnit: Bool
     let numberOfDecimalPlaces: Int
     
@@ -60,34 +54,15 @@ public struct FoodLabel: View {
     public init(
         data: Binding<FoodLabelData>,
         didTapFooter: (() -> ())? = nil,
-//        energyValue: Binding<FoodLabelValue>,
-//        carb: Binding<Double>,
-//        fat: Binding<Double>,
-//        protein: Binding<Double>,
-//        nutrients: Binding<[NutrientType : FoodLabelValue]>,
-//        amountPerString: Binding<String>,
-        
-//        showFooterText: Bool = false,
-//        showRDAValues: Bool = true,
         allowTapToChangeEnergyUnit: Bool = false,
         numberOfDecimalPlaces: Int = 1
     ) {
         _data = data
-//        _energyValue = energyValue
-//        _carb = carb
-//        _fat = fat
-//        _protein = protein
-//        _nutrients = nutrients
-//        _amountPerString = amountPerString
-        
         self.didTapFooter = didTapFooter
-//        self.showFooterText = showFooterText
-//        self.showRDAValues = showRDAValues
         self.allowTapToChangeEnergyUnit = allowTapToChangeEnergyUnit
         self.numberOfDecimalPlaces = numberOfDecimalPlaces
         
         let isKcal = data.wrappedValue.energyValue.unit != FoodLabelUnit.kj
-//        let isKcal = energyValue.wrappedValue.unit != FoodLabelUnit.kj
         _showingEnergyInCalories = State(initialValue: isKcal)
     }
     
@@ -139,20 +114,6 @@ public struct FoodLabel: View {
     }
 }
 
-//public struct FoodLabelPreview: View {
-//
-//    class ViewModel: ObservableObject {
-//
-//    }
-//
-//    @StateObject var viewModel = ViewModel()
-//    public var body: some View {
-//        FoodLabel(dataSource: viewModel)
-//            .frame(width: 350)
-//    }
-//    public init() { }
-//}
-
 extension FoodLabel {
     func rectangle(height: CGFloat) -> some View {
 //        Rectangle()
@@ -177,24 +138,18 @@ extension FoodLabel {
 //        .background(.yellow)
     }
     
-    var fatRows: some View {
-        Group {
-            row(title: "Total Fat",
-                value: data.fat,
-                rdaValue: MacroRDA.fat,
-                unit: "g",
-                bold: true,
-                /// Don't include a divider above Fat if we're not showing RDA values as there won't be a % Daily VAlue header to have in it
-                includeDivider: data.showRDA
-            )
-            nutrientRow(forType: .saturatedFat, indentLevel: 1)
-            nutrientRow(forType: .polyunsaturatedFat, indentLevel: 1)
-            nutrientRow(forType: .monounsaturatedFat, indentLevel: 1)
-            nutrientRow(forType: .transFat, indentLevel: 1)
-        }
-    }
-    
-    func row(title: String, prefix: String? = nil, value: Double, rdaValue: Double? = nil, unit: String = "g", indentLevel: Int = 0, bold: Bool = false, includeDivider: Bool = true, prefixedWithIncludes: Bool = false) -> some View {
+    func row(
+        title: String,
+        prefix: String? = nil,
+        value: Double,
+        rdaValue: Double? = nil,
+        usingCustomRDA: Bool = false,
+        unit: String = "g",
+        indentLevel: Int = 0,
+        bold: Bool = false,
+        includeDivider: Bool = true,
+        prefixedWithIncludes: Bool = false
+    ) -> some View {
         let prefixView = Group {
             if let prefix = prefix {
                 Text(prefix)
@@ -262,6 +217,26 @@ extension FoodLabel {
                 )
         }
         
+        func rdaLabel(_ rdaValue: Double) -> some View {
+            @ViewBuilder
+            var marker: some View {
+                if usingCustomRDA {
+                    Text("†")
+                        .fontWeight(.light)
+                }
+            }
+            return HStack(alignment: .top, spacing: 2) {
+                Color.clear
+                    .animatedRDAValue(
+                        value: (value/rdaValue) * 100.0,
+                        isAnimating: true
+                    )
+                marker
+                    .font(.footnote)
+                    .offset(y: -2)
+            }
+        }
+        
         return VStack(spacing: 0) {
             if includeDivider {
                 divider
@@ -278,20 +253,10 @@ extension FoodLabel {
                             animatedIncludedValue
                         } else {
                             animatedValueWithLabel
-//                            titleView
-//                            valueAndSuffix
                         }
                         Spacer()
                         if let rdaValue, data.showRDA {
-                            Color.clear
-                                .animatedRDAValue(
-                                    value: (value/rdaValue) * 100.0,
-                                    isAnimating: true
-                                )
-//                            Text("\(Int((value/rdaValue)*100.0))%")
-//                                .fontWeight(.bold)
-//                                .font(.headline)
-//                                .foregroundColor(.primary)
+                            rdaLabel(rdaValue)
                         }
                     }
                 }

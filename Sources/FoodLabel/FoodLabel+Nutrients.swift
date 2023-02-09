@@ -14,33 +14,104 @@ extension NutrientType {
 }
 extension FoodLabel {
     
+    var carbRows: some View {
+        var carbRow: some View {
+            var rdaValue: Double {
+                data.customRDAValues[.macro(.carb)]?.0 ?? MacroRDA.carb
+            }
+
+            return row(
+                title: "Total Carbohydrate",
+                value: data.carb,
+                rdaValue: rdaValue,
+                usingCustomRDA: data.customRDAValues[.macro(.carb)] != nil,
+                unit: "g",
+                bold: true
+            )
+        }
+        
+        return Group {
+            carbRow
+            nutrientRow(forType: .dietaryFiber, indentLevel: 1)
+            nutrientRow(forType: .solubleFiber, indentLevel: 2)
+            nutrientRow(forType: .insolubleFiber, indentLevel: 2)
+            nutrientRow(forType: .sugars, indentLevel: 1)
+            nutrientRow(forType: .addedSugars, indentLevel: 2, prefixedWithIncludes: true) /// Displays as "Includes xg Added Sugar"
+            nutrientRow(forType: .sugarAlcohols, indentLevel: 2)
+        }
+    }
+    
+    var fatRows: some View {
+        var fatRow: some View {
+            var rdaValue: Double {
+                data.customRDAValues[.macro(.fat)]?.0 ?? MacroRDA.fat
+            }
+
+            return row(title: "Total Fat",
+                value: data.fat,
+                rdaValue: rdaValue,
+                usingCustomRDA: data.customRDAValues[.macro(.fat)] != nil,
+                unit: "g",
+                bold: true,
+                /// Don't include a divider above Fat if we're not showing RDA values as there won't be a % Daily VAlue header to have in it
+                includeDivider: data.showRDA
+            )
+        }
+        return Group {
+            fatRow
+            nutrientRow(forType: .saturatedFat, indentLevel: 1)
+            nutrientRow(forType: .polyunsaturatedFat, indentLevel: 1)
+            nutrientRow(forType: .monounsaturatedFat, indentLevel: 1)
+            nutrientRow(forType: .transFat, indentLevel: 1)
+        }
+    }
+    
     var proteinRow: some View {
-        row(
+        var rdaValue: Double {
+            data.customRDAValues[.macro(.protein)]?.0 ?? MacroRDA.protein
+        }
+        
+        return row(
             title: "Protein",
             value: data.protein,
-            rdaValue: MacroRDA.protein,
+            rdaValue: rdaValue,
+            usingCustomRDA: data.customRDAValues[.macro(.protein)] != nil,
             unit: "g",
             bold: true
         )
     }
     
-    @ViewBuilder
     func nutrientRow(forType type: NutrientType, indentLevel: Int = 0, prefixedWithIncludes: Bool = false) -> some View {
         let prefix = type == .transFat ? "Trans" : nil
         let title = type.foodLabelDescription
         let bold = type == .cholesterol || type == .sodium
         
-        if let value = nutrientValue(for: type) {
-            row(title: title,
-                prefix: prefix,
-                value: value.amount,
-                rdaValue: type.dailyValue?.0,
-//                unit: type.dailyValue?.1.shortDescription ?? "g",
-                unit: value.unit?.description ?? "",
-                indentLevel: indentLevel,
-                bold: bold,
-                prefixedWithIncludes: prefixedWithIncludes
-            )
+        func rdaValue(in unit: FoodLabelUnit?) -> Double? {
+            guard let rdaValue = data.customRDAValues[.micro(type)] ?? type.dailyValue else {
+                return nil
+            }
+            
+            if let unit {
+                return rdaValue.1.convert(rdaValue.0, to: unit)
+            } else {
+                return rdaValue.0
+            }
+            
+        }
+        
+        return Group {
+            if let value = nutrientValue(for: type) {
+                row(title: title,
+                    prefix: prefix,
+                    value: value.amount,
+                    rdaValue: rdaValue(in: value.unit),
+                    usingCustomRDA: data.customRDAValues[.micro(type)] != nil,
+                    unit: value.unit?.description ?? "",
+                    indentLevel: indentLevel,
+                    bold: bold,
+                    prefixedWithIncludes: prefixedWithIncludes
+                )
+            }
         }
     }
 
@@ -62,24 +133,7 @@ extension FoodLabel {
         }
     }
     
-    var carbRows: some View {
-        Group {
-            row(
-                title: "Total Carbohydrate",
-                value: data.carb,
-                rdaValue: MacroRDA.carb,
-                unit: "g",
-                bold: true
-            )
-            nutrientRow(forType: .dietaryFiber, indentLevel: 1)
-            nutrientRow(forType: .solubleFiber, indentLevel: 2)
-            nutrientRow(forType: .insolubleFiber, indentLevel: 2)
-            nutrientRow(forType: .sugars, indentLevel: 1)
-            nutrientRow(forType: .addedSugars, indentLevel: 2, prefixedWithIncludes: true) /// Displays as "Includes xg Added Sugar"
-            nutrientRow(forType: .sugarAlcohols, indentLevel: 2)
-        }
-    }
-    
+
     var vitaminRows: some View {
         Group {
             ForEach(NutrientType.vitamins, id: \.self) {

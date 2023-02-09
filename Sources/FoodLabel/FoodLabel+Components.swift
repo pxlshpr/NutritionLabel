@@ -45,23 +45,43 @@ extension FoodLabel {
     var customMicros: some View {
         customNutrientRows
     }
-
+    
     var footer: some View {
         Group {
             Spacer().frame(height: 3)
             rectangle(height: 8)
             Spacer().frame(height: 12)
-            Button {
-                didTapFooter?()
-            } label: {
-                HStack(alignment: .top, spacing: 0) {
-                    Text("*")
-                    Text("The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. \(Text("You can customize these.").foregroundColor(.accentColor))")
-                        .multilineTextAlignment(.leading)
+            VStack(alignment: .leading, spacing: 10) {
+                Button {
+                    didTapFooter?()
+                } label: {
+                    HStack(alignment: .top, spacing: 0) {
+                        Text("*")
+                        Text("The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. \(Text("You can customize these.").foregroundColor(.accentColor))")
+                            .multilineTextAlignment(.leading)
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundColor(.primary)
+                    .font(.footnote)
                 }
-                .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(.primary)
-                .font(.footnote)
+                if !data.customRDAValues.isEmpty {
+                    HStack(alignment: .top, spacing: 0) {
+                        Text("†")
+                        HStack {
+                            Text("Using goal from")
+                            Text("🫃🏽 Cutting")
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 5)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 7, style: .continuous)
+                                        .fill(Color(.secondarySystemFill))
+                                )
+                            Text("diet.")
+                        }
+                    }
+                    .foregroundColor(.primary)
+                    .font(.footnote)
+                }
             }
             Spacer().frame(height: 9)
         }
