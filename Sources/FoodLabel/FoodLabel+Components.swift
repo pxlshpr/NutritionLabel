@@ -282,8 +282,6 @@ struct AnimatableEnergyValueModifier: AnimatableModifier {
     
     func body(content: Content) -> some View {
         content
-//            .frame(width: size.width, height: size.height)
-//            .frame(width: 200 + unitWidth, height: size.height)
             .frame(maxWidth: .infinity)
             .frame(height: size.height)
             .overlay(
@@ -292,7 +290,6 @@ struct AnimatableEnergyValueModifier: AnimatableModifier {
                     HStack(alignment: .top, spacing: 0) {
                         Text(amountString)
                             .multilineTextAlignment(.leading)
-                            .foregroundColor(.primary)
                             .font(.system(size: fontSize, weight: fontWeight, design: .default))
                         Text(unitString)
                             .font(.system(
@@ -301,8 +298,8 @@ struct AnimatableEnergyValueModifier: AnimatableModifier {
                                 design: .default)
                             )
                             .offset(y: 2)
-                            .foregroundColor(.primary)
                     }
+                    .foregroundColor(.primary)
                 }
             )
     }
@@ -391,9 +388,9 @@ struct AnimatableValue: AnimatableModifier {
                         weight: unitFontWeight,
                         design: .default)
                     )
-                    .foregroundColor(.primary)
                     Spacer()
                 }
+                .foregroundColor(.primary)
             )
     }
 }
@@ -556,7 +553,6 @@ struct AnimatableQuantityModifier: AnimatableModifier {
                     HStack(alignment: .center, spacing: 4) {
                         Text(amountString)
                             .multilineTextAlignment(.leading)
-                            .foregroundColor(.primary)
                             .font(.system(size: fontSize, weight: fontWeight, design: .default))
                         Text(unitString)
                             .font(.system(
@@ -567,8 +563,8 @@ struct AnimatableQuantityModifier: AnimatableModifier {
                             .minimumScaleFactor(0.2)
                             .lineLimit(3)
 //                            .fixedSize(horizontal: true, vertical: false)
-                            .foregroundColor(.primary)
                     }
+                    .foregroundColor(.primary)
                 }
             )
     }
