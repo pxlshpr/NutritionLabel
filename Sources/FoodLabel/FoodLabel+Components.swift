@@ -59,6 +59,7 @@ extension FoodLabel {
                     Text("The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. \(Text("You can customize these.").foregroundColor(.accentColor))")
                         .multilineTextAlignment(.leading)
                 }
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(.primary)
                 .font(.footnote)
             }
