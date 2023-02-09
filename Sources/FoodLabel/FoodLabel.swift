@@ -13,8 +13,8 @@ public struct FoodLabelData {
     let quantityUnit: String
     
     let showRDA: Bool
-    
     let customRDAValues: [AnyNutrient: (Double, NutrientUnit)]
+    let dietName: String?
 
     public init(
         energyValue: FoodLabelValue,
@@ -25,7 +25,8 @@ public struct FoodLabelData {
         quantityValue: Double,
         quantityUnit: String,
         showRDA: Bool = false,
-        customRDAValues: [AnyNutrient: (Double, NutrientUnit)] = [:]
+        customRDAValues: [AnyNutrient: (Double, NutrientUnit)] = [:],
+        dietName: String? = nil
     ) {
         self.energyValue = energyValue
         self.carb = carb
@@ -36,6 +37,7 @@ public struct FoodLabelData {
         self.quantityUnit = quantityUnit
         self.showRDA = showRDA
         self.customRDAValues = customRDAValues
+        self.dietName = dietName
     }
 }
 

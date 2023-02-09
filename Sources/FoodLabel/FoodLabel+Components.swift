@@ -64,12 +64,12 @@ extension FoodLabel {
                     .foregroundColor(.primary)
                     .font(.footnote)
                 }
-                if !data.customRDAValues.isEmpty {
-                    HStack(alignment: .top, spacing: 0) {
+                if !data.customRDAValues.isEmpty, let dietName = data.dietName {
+                    HStack(alignment: .center, spacing: 0) {
                         Text("†")
                         HStack {
                             Text("Using goal from")
-                            Text("🫃🏽 Cutting")
+                            Text(dietName)
                                 .padding(.vertical, 5)
                                 .padding(.horizontal, 5)
                                 .background(
