@@ -90,9 +90,6 @@ public struct FoodLabel: View {
                 footer
             }
         }
-        .readSize(onChange: { size in
-            self.height = size.height
-        })
         .frame(height: height)
         .padding(15)
         .border(borderColor, width: 5.0)
