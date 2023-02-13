@@ -68,6 +68,8 @@ public struct FoodLabel: View {
         _showingEnergyInCalories = State(initialValue: isKcal)
     }
     
+    @State var height: CGFloat = 0
+    
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             header
@@ -88,6 +90,10 @@ public struct FoodLabel: View {
                 footer
             }
         }
+        .readSize(onChange: { size in
+            self.height = size.height
+        })
+        .frame(height: height)
         .padding(15)
         .border(borderColor, width: 5.0)
         .onChange(of: data.energyValue) { newValue in
