@@ -69,7 +69,7 @@ public struct FoodLabel: View {
     }
     
     public var body: some View {
-        LazyVStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             header
             calories
             if data.showRDA {
