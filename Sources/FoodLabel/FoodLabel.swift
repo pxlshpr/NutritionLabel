@@ -69,7 +69,7 @@ public struct FoodLabel: View {
     }
     
     public var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        LazyVStack(alignment: .leading, spacing: 0) {
             header
             calories
             if data.showRDA {
@@ -88,6 +88,7 @@ public struct FoodLabel: View {
                 footer
             }
         }
+        .fixedSize(horizontal: false, vertical: true)
         .padding(15)
         .border(borderColor, width: 5.0)
         .onChange(of: data.energyValue) { newValue in
