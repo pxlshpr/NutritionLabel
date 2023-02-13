@@ -88,7 +88,6 @@ public struct FoodLabel: View {
                 footer
             }
         }
-        .fixedSize(horizontal: false, vertical: true)
         .padding(15)
         .border(borderColor, width: 5.0)
         .onChange(of: data.energyValue) { newValue in
