@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/FoodLabelScanner",
       "state" : {
-        "revision" : "8b6af10146252411113a069c6e8d5f4aa3531082",
-        "version" : "0.0.82"
+        "revision" : "42750541da918fb39a249502bb6e0828eb7ca187",
+        "version" : "0.0.150"
       }
     },
     {
@@ -23,8 +23,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/PrepDataTypes",
       "state" : {
-        "revision" : "c91659d46b8284fecd9094a206c61108324e146e",
-        "version" : "0.0.255"
+        "revision" : "5d1e3c4d0017d06d78686f9fe73628a66ada0fba",
+        "version" : "0.0.256"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections",
+      "state" : {
+        "revision" : "937e904258d22af6e447a0b72c0bc67583ef64a2",
+        "version" : "1.0.4"
       }
     },
     {
@@ -46,12 +55,21 @@
       }
     },
     {
+      "identity" : "swiftui-introspect",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect",
+      "state" : {
+        "revision" : "f2616860a41f9d9932da412a8978fec79c06fe24",
+        "version" : "0.1.4"
+      }
+    },
+    {
       "identity" : "swiftuisugar",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/SwiftUISugar",
       "state" : {
-        "revision" : "17211a9d8b550ddf260a181ffa6ce09b789a71e7",
-        "version" : "0.0.215"
+        "revision" : "0d046a1051d22f8bacb3e0b416f1e09389fb5d8f",
+        "version" : "0.0.367"
       }
     },
     {
@@ -59,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pxlshpr/VisionSugar",
       "state" : {
-        "revision" : "f6fecd75f07cbb1bb9e0eb7b090bb79de7db8215",
-        "version" : "0.0.75"
+        "revision" : "badb046c757441e1523b1a7b04b37a4fb8827438",
+        "version" : "0.0.78"
       }
     }
   ],
