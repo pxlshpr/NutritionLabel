@@ -69,9 +69,7 @@ public struct FoodLabel: View {
     }
     
     public var body: some View {
-        //TODO: Spacing here seems to fix the lines issue
-        LazyVStack(alignment: .leading, spacing: 0) {
-//        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             header
             calories
             if data.showRDA {
