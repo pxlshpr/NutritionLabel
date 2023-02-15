@@ -728,7 +728,6 @@ struct AnimatableRDAValue: AnimatableModifier {
             .overlay(
                 animatedLabel
                     .readSize { size in
-                        print("Size: \(size)")
                         self.size = size
                     }
 //                    .background(.blue)
