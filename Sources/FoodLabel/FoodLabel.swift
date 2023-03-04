@@ -262,7 +262,7 @@ extension FoodLabel {
                             animatedValueWithLabel
                         }
                         Spacer()
-                        if let rdaValue, rdaValue > ¡0, data.showRDA {
+                        if let rdaValue, rdaValue > 0, data.showRDA {
                             rdaLabel(rdaValue)
                         }
                     }
