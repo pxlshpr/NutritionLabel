@@ -226,10 +226,16 @@ extension FoodLabel {
                         .fontWeight(.light)
                 }
             }
+            
+            var percent: Double {
+                guard rdaValue > 0 else { return 0 }
+                return (value/rdaValue) * 100.0
+            }
+            
             return HStack(alignment: .top, spacing: 2) {
                 Color.clear
                     .animatedRDAValue(
-                        value: (value/rdaValue) * 100.0,
+                        value: percent,
                         isAnimating: true
                     )
                 marker
@@ -256,7 +262,7 @@ extension FoodLabel {
                             animatedValueWithLabel
                         }
                         Spacer()
-                        if let rdaValue, data.showRDA {
+                        if let rdaValue, rdaValue > ¡0, data.showRDA {
                             rdaLabel(rdaValue)
                         }
                     }
