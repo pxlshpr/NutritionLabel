@@ -1,9 +1,9 @@
-import PrepDataTypes
+import FoodDataTypes
 
-extension NutrientType {
+extension Micro {
     
     
-    static var nutrientsIncludedInMainSection: [NutrientType] {
+    static var nutrientsIncludedInMainSection: [Micro] {
         [
             .saturatedFat,
             .polyunsaturatedFat,

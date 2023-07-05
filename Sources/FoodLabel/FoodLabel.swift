@@ -1,19 +1,19 @@
 import SwiftUI
 import SwiftHaptics
-import PrepDataTypes
-import FoodLabelScanner
+import FoodDataTypes
+//import FoodLabelScanner
 
 public struct FoodLabelData {
     let energyValue: FoodLabelValue
     let carb: Double
     let fat: Double
     let protein: Double
-    let nutrients: [NutrientType : FoodLabelValue]
+    let nutrients: [Micro : FoodLabelValue]
     let quantityValue: Double
     let quantityUnit: String
     
     let showRDA: Bool
-    let customRDAValues: [AnyNutrient: (Double, NutrientUnit)]
+    let customRDAValues: [Nutrient: (Double, NutrientUnit)]
     let dietName: String?
 
     public init(
@@ -21,11 +21,11 @@ public struct FoodLabelData {
         carb: Double,
         fat: Double,
         protein: Double,
-        nutrients: [NutrientType : FoodLabelValue],
+        nutrients: [Micro : FoodLabelValue],
         quantityValue: Double,
         quantityUnit: String,
         showRDA: Bool = false,
-        customRDAValues: [AnyNutrient: (Double, NutrientUnit)] = [:],
+        customRDAValues: [Nutrient: (Double, NutrientUnit)] = [:],
         dietName: String? = nil
     ) {
         self.energyValue = energyValue
@@ -110,7 +110,7 @@ public struct FoodLabel: View {
         !data.nutrients.filter { !$0.key.isIncludedInMainSection }.isEmpty
     }
 
-    func nutrientValue(for type: NutrientType) -> FoodLabelValue? {
+    func nutrientValue(for type: Micro) -> FoodLabelValue? {
         data.nutrients[type]
     }
 }
@@ -292,7 +292,7 @@ extension FoodLabel {
 //        "1 serving (1 cup, chopped)"
 //    }
 //    
-//    var nutrients: [NutrientType : Double] {
+//    var nutrients: [Micro : Double] {
 //        [
 //            .saturatedFat: 5,
 //            .addedSugars: 35,

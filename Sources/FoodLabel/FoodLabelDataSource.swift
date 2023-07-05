@@ -1,5 +1,5 @@
 //import Foundation
-//import PrepDataTypes
+//import FoodDataTypes
 //import FoodLabelScanner
 //
 //public protocol FoodLabelDataSource: ObservableObject {
@@ -8,7 +8,7 @@
 //    var fatAmount: Double { get }
 //    var proteinAmount: Double { get }
 //
-//    var nutrients: [NutrientType: Double] { get }
+//    var nutrients: [Micro: Double] { get }
 //    var showFooterText: Bool { get }
 //    var showRDAValues: Bool { get }
 //    var allowTapToChangeEnergyUnit: Bool { get }
@@ -44,7 +44,7 @@
 //        false
 //    }
 //    
-//    func nutrientAmount(for type: NutrientType) -> Double? {
+//    func nutrientAmount(for type: Micro) -> Double? {
 //        nutrients[type]
 //    }
 //}

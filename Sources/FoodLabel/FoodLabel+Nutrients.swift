@@ -1,14 +1,14 @@
 import SwiftUI
-import PrepDataTypes
+import FoodDataTypes
 
-extension NutrientType {
+extension Micro {
     var foodLabelDescription: String {
         if let letter = vitaminLetterName {
             return "Vitamin \(letter)"
         } else if self == .transFat {
             return "Fat" /// We'll be prefixing `Trans` in a separate text
         } else {
-            return description
+            return name
         }
     }
 }
@@ -81,7 +81,7 @@ extension FoodLabel {
         )
     }
     
-    func nutrientRow(forType type: NutrientType, indentLevel: Int = 0, prefixedWithIncludes: Bool = false) -> some View {
+    func nutrientRow(forType type: Micro, indentLevel: Int = 0, prefixedWithIncludes: Bool = false) -> some View {
         let prefix = type == .transFat ? "Trans" : nil
         let title = type.foodLabelDescription
         let bold = type == .cholesterol || type == .sodium
@@ -136,7 +136,7 @@ extension FoodLabel {
 
     var vitaminRows: some View {
         Group {
-            ForEach(NutrientType.vitamins, id: \.self) {
+            ForEach(Micro.vitamins, id: \.self) {
                 nutrientRow(forType: $0)
             }
         }
@@ -144,7 +144,7 @@ extension FoodLabel {
     
     var mineralRows: some View {
         Group {
-            ForEach(NutrientType.minerals.filter { $0 != .sodium }, id: \.self) {
+            ForEach(Micro.minerals.filter { $0 != .sodium }, id: \.self) {
                 nutrientRow(forType: $0)
             }
         }
@@ -152,7 +152,7 @@ extension FoodLabel {
     
     var miscRows: some View {
         Group {
-            ForEach(NutrientType.misc, id: \.self) {
+            ForEach(Micro.misc, id: \.self) {
                 nutrientRow(forType: $0)
             }
         }

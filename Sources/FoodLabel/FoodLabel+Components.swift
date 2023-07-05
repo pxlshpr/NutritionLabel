@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftHaptics
+import ViewSugar
 
 extension FoodLabel {
     var header: some View {
@@ -132,7 +133,6 @@ extension FoodLabel {
         .if(allowTapToChangeEnergyUnit, transform: { view in
             view
                 .onTapGesture {
-                    Haptics.feedback(style: .soft)
                     withAnimation {
                         showingEnergyInCalories.toggle()
                     }

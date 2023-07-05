@@ -1,5 +1,5 @@
 import SwiftUI
-import PrepDataTypes
+import FoodDataTypes
 
 extension FoodLabel {
     
