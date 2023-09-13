@@ -1,6 +1,6 @@
 import SwiftUI
-import SwiftHaptics
-import FoodDataTypes
+//import SwiftHaptics
+import PrepShared
 //import FoodLabelScanner
 
 public struct FoodLabelData {

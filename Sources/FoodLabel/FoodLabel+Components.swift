@@ -1,5 +1,5 @@
 import SwiftUI
-import SwiftHaptics
+//import SwiftHaptics
 import ViewSugar
 
 extension FoodLabel {

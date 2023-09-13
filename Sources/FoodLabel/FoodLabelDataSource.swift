@@ -1,5 +1,5 @@
 //import Foundation
-//import FoodDataTypes
+//import PrepShared
 //import FoodLabelScanner
 //
 //public protocol FoodLabelDataSource: ObservableObject {

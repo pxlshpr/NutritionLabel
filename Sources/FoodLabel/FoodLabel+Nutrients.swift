@@ -1,5 +1,5 @@
 import SwiftUI
-import FoodDataTypes
+import PrepShared
 
 extension Micro {
     var foodLabelDescription: String {

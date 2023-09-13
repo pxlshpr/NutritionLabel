@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/pxlshpr/FoodDataTypes", from: "0.0.23"),
+        .package(url: "https://github.com/pxlshpr/PrepShared", from: "0.0.18"),
         .package(url: "https://github.com/pxlshpr/ViewSugar", from: "0.0.4"),
     ],
     targets: [
@@ -25,7 +25,7 @@ let package = Package(
         .target(
             name: "FoodLabel",
             dependencies: [
-                .product(name: "FoodDataTypes", package: "FoodDataTypes"),
+                .product(name: "PrepShared", package: "PrepShared"),
                 .product(name: "ViewSugar", package: "ViewSugar"),
             ]),
         .testTarget(
